@@ -1,0 +1,195 @@
+{
+    "project_name": "PeaZipMenu",
+    "target_file_managers": [
+        "nautilus",
+        "nemo",
+        "dolphin",
+        "thunar",
+        "pcmanfm",
+        "caja"
+    ],
+    "menu": {
+        "title": {
+            "en": "PeaZip",
+            "ar": "بيزيب"
+        },
+        "icon": "peazip",
+        "extensions": [
+            ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst",
+            ".tgz", ".tbz2", ".txz", ".tzst", ".001", ".iso", ".cab", ".arj",
+            ".txt", ".pdf", ".mp4", ".mkv", ".mp3", ".jpg", ".png", ".doc", ".docx"
+        ],
+        "directories": true,
+        "items": [
+            {
+                "name": {
+                    "en": "Open Archive (GUI)",
+                    "ar": "فتح الأرشيف (واجهة)"
+                },
+                "command": "peazip %file",
+                "icon": "peazip",
+                "requires_binary": "peazip",
+                "max_files": 1,
+                "supported_extensions": [
+                    ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst",
+                    ".tgz", ".tbz2", ".txz", ".tzst", ".001", ".iso", ".cab", ".arj"
+                ]
+            },
+            {
+                "group": {
+                    "en": "Extract",
+                    "ar": "استخراج"
+                },
+                "icon": "archive-extract",
+                "items": [
+                    {
+                        "name": {
+                            "en": "Extract Here",
+                            "ar": "استخراج هنا"
+                        },
+                        "command": "peazip -ext2here %file",
+                        "icon": "archive-extract",
+                        "requires_binary": "peazip",
+                        "max_files": 20,
+                        "supported_extensions": [
+                            ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst",
+                            ".tgz", ".tbz2", ".txz", ".tzst", ".001", ".iso"
+                        ]
+                    },
+                    {
+                        "name": {
+                            "en": "Extract to New Folder",
+                            "ar": "استخراج لمجلد جديد"
+                        },
+                        "command": "peazip -ext2folder %file",
+                        "icon": "folder-new",
+                        "requires_binary": "peazip",
+                        "max_files": 20,
+                        "supported_extensions": [
+                            ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst",
+                            ".tgz", ".tbz2", ".txz", ".tzst", ".001", ".iso"
+                        ]
+                    },
+                    {
+                        "name": {
+                            "en": "Extract... (Choose)",
+                            "ar": "استخراج... (اختيار المكان)"
+                        },
+                        "command": "peazip -ext2here %file -gui",
+                        "icon": "folder-remote",
+                        "requires_binary": "peazip",
+                        "max_files": 1,
+                        "supported_extensions": [
+                            ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst"
+                        ]
+                    },
+                    {
+                        "group": {
+                            "en": "Advanced Extract",
+                            "ar": "استخراج متقدم"
+                        },
+                        "icon": "applications-system",
+                        "items": [
+                            {
+                                "name": {
+                                    "en": "Extract Selected File (GUI)",
+                                    "ar": "استخراج ملف محدد (واجهة)"
+                                },
+                                "command": "peazip %file",
+                                "icon": "document-open",
+                                "requires_binary": "peazip",
+                                "max_files": 1,
+                                "supported_extensions": [
+                                    ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst"
+                                ]
+                            },
+                            {
+                                "name": {
+                                    "en": "Test Archive",
+                                    "ar": "فحص الأرشيف"
+                                },
+                                "command": "peazip -test %file",
+                                "icon": "dialog-ok",
+                                "requires_binary": "peazip",
+                                "max_files": 10,
+                                "supported_extensions": [
+                                    ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "group": {
+                    "en": "Add to Archive",
+                    "ar": "إضافة لأرشيف"
+                },
+                "icon": "archive-insert",
+                "items": [
+                    {
+                        "name": {
+                            "en": "Add to ZIP",
+                            "ar": "إضافة إلى ZIP"
+                        },
+                        "command": "peazip -add2zip %file",
+                        "icon": "package-x-generic",
+                        "requires_binary": "peazip",
+                        "max_files": 100,
+                        "supported_extensions": [
+                            ".txt", ".pdf", ".mp4", ".mkv", ".mp3", ".jpg", ".png", ".doc", ".docx", ".zip", ".7z"
+                        ]
+                    },
+                    {
+                        "name": {
+                            "en": "Add to 7Z",
+                            "ar": "إضافة إلى 7Z"
+                        },
+                        "command": "peazip -add27z %file",
+                        "icon": "package-x-generic",
+                        "requires_binary": "peazip",
+                        "max_files": 100,
+                        "supported_extensions": [
+                            ".txt", ".pdf", ".mp4", ".mkv", ".mp3", ".jpg", ".png", ".doc", ".docx", ".zip", ".7z"
+                        ]
+                    },
+                    {
+                        "group": {
+                            "en": "Professional",
+                            "ar": "احترافي"
+                        },
+                        "icon": "package-x-generic",
+                        "items": [
+                            {
+                                "name": {
+                                    "en": "Add to TAR.GZ (Linux)",
+                                    "ar": "إضافة إلى TAR.GZ"
+                                },
+                                "command": "peazip -add2tgz %file",
+                                "icon": "package-x-generic",
+                                "requires_binary": "peazip",
+                                "max_files": 100,
+                                "supported_extensions": [
+                                    ".txt", ".pdf", ".mp4", ".mkv", ".mp3", ".jpg", ".png"
+                                ]
+                            },
+                            {
+                                "name": {
+                                    "en": "Add to ZST (Fast)",
+                                    "ar": "إضافة إلى ZST (سريع)"
+                                },
+                                "command": "peazip -add2zst %file",
+                                "icon": "package-x-generic",
+                                "requires_binary": "peazip",
+                                "max_files": 100,
+                                "supported_extensions": [
+                                    ".txt", ".pdf", ".mp4", ".mkv", ".mp3", ".jpg", ".png"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
