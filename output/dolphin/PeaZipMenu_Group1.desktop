@@ -1,0 +1,44 @@
+# PeaZipMenu — ClickMesh-generated service menu for Dolphin (KDE).
+#
+# Installation:
+#   KDE Plasma 5 :  ~/.local/share/kservices5/ServiceMenus/
+#   KDE Plasma 6 :  ~/.local/share/kio/servicemenus/
+#
+# After copying, restart Dolphin or run:  kbuildsycoca6 (or kbuildsycoca5)
+
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+MimeType=application/octet-stream;application/vnd.ms-cab-compressed;application/vnd.rar;application/x-7z-compressed;application/x-tar;application/zip;application/zstd;inode/directory;
+X-KDE-Submenu=PeaZip
+X-KDE-Submenu[ar]=بيزيب
+Icon=peazip
+Actions=Action0;
+
+[Desktop Action Action0]
+Name=Open Archive (GUI)
+Name[ar]=فتح الأرشيف (واجهة)
+Icon=peazip
+Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
+if ! command -v peazip >/dev/null 2>&1; then
+  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
+  exit 1
+fi
+for file in "$@"; do
+  export file
+  export dir="$(dirname "$file")"
+  export filename="$(basename "$file")"
+  ext="${filename##*.}"
+  [ "$ext" = "$filename" ] && ext=""
+  export ext
+  export basename="${filename%.*}"
+  export count=$#
+  _iter_script=$(mktemp)
+  cat > "$_iter_script" << 'INNEREOF'
+peazip "$file"
+INNEREOF
+  bash "$_iter_script"
+  rm -f "$_iter_script"
+done
+EOF
+sh "$_cm" "$@"; rm -f "$_cm"' -- %F
