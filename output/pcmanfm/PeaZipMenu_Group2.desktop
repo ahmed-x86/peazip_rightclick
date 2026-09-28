@@ -1,0 +1,73 @@
+# PeaZipMenu — ClickMesh-generated custom action for PCManFM / PCManFM-Qt.
+#
+# Installation:
+#   PCManFM (GTK)  :  ~/.local/share/file-manager/actions/
+#   PCManFM-Qt     :  ~/.local/share/file-manager/actions/
+#
+# After copying, restart PCManFM to pick up the new actions.
+
+[Desktop Entry]
+Type=Action
+Name=PeaZip
+Name[ar]=بيزيب
+Icon=peazip
+Profiles=default;
+MimeTypes=application/octet-stream;application/vnd.rar;application/x-7z-compressed;application/x-tar;application/zip;application/zstd;inode/directory;
+TargetLocation=true
+Actions=Action0;Action1;
+
+[Desktop Action Action0]
+Name=Extract ▸ Extract Here
+Name[ar]=استخراج ▸ استخراج هنا
+Icon=archive-extract
+Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
+if ! command -v peazip >/dev/null 2>&1; then
+  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
+  exit 1
+fi
+for file in "$@"; do
+  export file
+  export dir="$(dirname "$file")"
+  export filename="$(basename "$file")"
+  ext="${filename##*.}"
+  [ "$ext" = "$filename" ] && ext=""
+  export ext
+  export basename="${filename%.*}"
+  export count=$#
+  _iter_script=$(mktemp)
+  cat > "$_iter_script" << 'INNEREOF'
+peazip -ext2here "$file"
+INNEREOF
+  bash "$_iter_script"
+  rm -f "$_iter_script"
+done
+EOF
+sh "$_cm" "$@"; rm -f "$_cm"' -- %F
+
+[Desktop Action Action1]
+Name=Extract ▸ Extract to New Folder
+Name[ar]=استخراج ▸ استخراج لمجلد جديد
+Icon=folder-new
+Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
+if ! command -v peazip >/dev/null 2>&1; then
+  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
+  exit 1
+fi
+for file in "$@"; do
+  export file
+  export dir="$(dirname "$file")"
+  export filename="$(basename "$file")"
+  ext="${filename##*.}"
+  [ "$ext" = "$filename" ] && ext=""
+  export ext
+  export basename="${filename%.*}"
+  export count=$#
+  _iter_script=$(mktemp)
+  cat > "$_iter_script" << 'INNEREOF'
+peazip -ext2folder "$file"
+INNEREOF
+  bash "$_iter_script"
+  rm -f "$_iter_script"
+done
+EOF
+sh "$_cm" "$@"; rm -f "$_cm"' -- %F
