@@ -1,190 +1,114 @@
 {
     "project_name": "PeaZipMenu",
     "target_file_managers": [
-        "nautilus",
-        "nemo",
-        "dolphin",
-        "thunar",
-        "pcmanfm",
-        "caja"
+        "nautilus", "nemo", "dolphin", "thunar", "pcmanfm", "caja"
     ],
-    "menu": {
-        "title": {
-            "en": "PeaZip",
-            "ar": "بيزيب"
-        },
-        "icon": "peazip",
-        "extensions": [
+    "global_defaults": {
+        "requires_binary": "peazip",
+        "icon": "package-x-generic"
+    },
+    "extension_groups": {
+        "all_archives": [
             ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst",
-            ".tgz", ".tbz2", ".txz", ".tzst", ".001", ".iso", ".cab", ".arj",
-            ".txt", ".pdf", ".mp4", ".mkv", ".mp3", ".jpg", ".png", ".doc", ".docx"
+            ".tgz", ".tbz2", ".txz", ".tzst", ".001", ".iso", ".cab", ".arj"
         ],
+        "common_archives": [
+            ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst",
+            ".tgz", ".tbz2", ".txz", ".tzst", ".001", ".iso"
+        ],
+        "basic_archives": [
+            ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst"
+        ],
+        "all_files": [
+            ".txt", ".pdf", ".mp4", ".mkv", ".mp3", ".jpg", ".png", 
+            ".doc", ".docx", ".zip", ".7z", ".iso", ".bin", ".sh", ".out"
+        ]
+    },
+    "menu": {
+        "title": { "en": "PeaZip", "ar": "بيزيب" },
+        "icon": "peazip",
         "directories": true,
         "items": [
             {
-                "name": {
-                    "en": "Open Archive (GUI)",
-                    "ar": "فتح الأرشيف (واجهة)"
-                },
+                "name": { "en": "Open Archive (GUI)", "ar": "فتح الأرشيف (واجهة)" },
                 "command": "peazip %file",
                 "icon": "peazip",
-                "requires_binary": "peazip",
                 "max_files": 1,
-                "supported_extensions": [
-                    ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst",
-                    ".tgz", ".tbz2", ".txz", ".tzst", ".001", ".iso", ".cab", ".arj"
-                ]
+                "supported_extensions": "@all_archives"
             },
             {
-                "group": {
-                    "en": "Extract",
-                    "ar": "استخراج"
-                },
+                "group": { "en": "Extract", "ar": "استخراج" },
                 "icon": "archive-extract",
                 "items": [
                     {
-                        "name": {
-                            "en": "Extract Here",
-                            "ar": "استخراج هنا"
-                        },
+                        "name": { "en": "Extract Here", "ar": "استخراج هنا" },
                         "command": "peazip -ext2here %file",
-                        "icon": "archive-extract",
-                        "requires_binary": "peazip",
                         "max_files": 20,
-                        "supported_extensions": [
-                            ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst",
-                            ".tgz", ".tbz2", ".txz", ".tzst", ".001", ".iso"
-                        ]
+                        "supported_extensions": "@common_archives"
                     },
                     {
-                        "name": {
-                            "en": "Extract to New Folder",
-                            "ar": "استخراج لمجلد جديد"
-                        },
+                        "name": { "en": "Extract to New Folder", "ar": "استخراج لمجلد جديد" },
                         "command": "peazip -ext2folder %file",
                         "icon": "folder-new",
-                        "requires_binary": "peazip",
                         "max_files": 20,
-                        "supported_extensions": [
-                            ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst",
-                            ".tgz", ".tbz2", ".txz", ".tzst", ".001", ".iso"
-                        ]
+                        "supported_extensions": "@common_archives"
                     },
                     {
-                        "name": {
-                            "en": "Extract... (Choose)",
-                            "ar": "استخراج... (اختيار المكان)"
-                        },
+                        "name": { "en": "Extract... (Choose)", "ar": "استخراج... (اختيار المكان)" },
                         "command": "peazip -ext2here %file -gui",
                         "icon": "folder-remote",
-                        "requires_binary": "peazip",
                         "max_files": 1,
-                        "supported_extensions": [
-                            ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst"
-                        ]
-                    },
-                    {
-                        "group": {
-                            "en": "Advanced Extract",
-                            "ar": "استخراج متقدم"
-                        },
-                        "icon": "applications-system",
-                        "items": [
-                            {
-                                "name": {
-                                    "en": "Extract Selected File (GUI)",
-                                    "ar": "استخراج ملف محدد (واجهة)"
-                                },
-                                "command": "peazip %file",
-                                "icon": "document-open",
-                                "requires_binary": "peazip",
-                                "max_files": 1,
-                                "supported_extensions": [
-                                    ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst"
-                                ]
-                            },
-                            {
-                                "name": {
-                                    "en": "Test Archive",
-                                    "ar": "فحص الأرشيف"
-                                },
-                                "command": "peazip -test %file",
-                                "icon": "dialog-ok",
-                                "requires_binary": "peazip",
-                                "max_files": 10,
-                                "supported_extensions": [
-                                    ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst"
-                                ]
-                            }
-                        ]
+                        "supported_extensions": "@basic_archives"
                     }
                 ]
             },
             {
-                "group": {
-                    "en": "Add to Archive",
-                    "ar": "إضافة لأرشيف"
-                },
+                "group": { "en": "Add to Archive", "ar": "إضافة لأرشيف" },
                 "icon": "archive-insert",
+                "supported_extensions": "@all_files",
+                "max_files": 100,
                 "items": [
                     {
-                        "name": {
-                            "en": "Add to ZIP",
-                            "ar": "إضافة إلى ZIP"
-                        },
-                        "command": "peazip -add2zip %file",
-                        "icon": "package-x-generic",
-                        "requires_binary": "peazip",
-                        "max_files": 100,
-                        "supported_extensions": [
-                            ".txt", ".pdf", ".mp4", ".mkv", ".mp3", ".jpg", ".png", ".doc", ".docx", ".zip", ".7z"
-                        ]
+                        "name": { "en": "Add to ZIP", "ar": "إضافة إلى ZIP" },
+                        "command": "peazip -add2zip %file"
                     },
                     {
-                        "name": {
-                            "en": "Add to 7Z",
-                            "ar": "إضافة إلى 7Z"
-                        },
-                        "command": "peazip -add27z %file",
-                        "icon": "package-x-generic",
-                        "requires_binary": "peazip",
-                        "max_files": 100,
-                        "supported_extensions": [
-                            ".txt", ".pdf", ".mp4", ".mkv", ".mp3", ".jpg", ".png", ".doc", ".docx", ".zip", ".7z"
-                        ]
+                        "name": { "en": "Add to 7Z", "ar": "إضافة إلى 7Z" },
+                        "command": "peazip -add27z %file"
                     },
                     {
-                        "group": {
-                            "en": "Professional",
-                            "ar": "احترافي"
-                        },
-                        "icon": "package-x-generic",
+                        "group": { "en": "Linux & Pro", "ar": "لينكس واحترافي" },
                         "items": [
                             {
-                                "name": {
-                                    "en": "Add to TAR.GZ (Linux)",
-                                    "ar": "إضافة إلى TAR.GZ"
-                                },
-                                "command": "peazip -add2tgz %file",
-                                "icon": "package-x-generic",
-                                "requires_binary": "peazip",
-                                "max_files": 100,
-                                "supported_extensions": [
-                                    ".txt", ".pdf", ".mp4", ".mkv", ".mp3", ".jpg", ".png"
-                                ]
+                                "name": { "en": "Add to TAR.GZ", "ar": "إضافة إلى TAR.GZ" },
+                                "command": "peazip -add2tgz %file"
                             },
                             {
-                                "name": {
-                                    "en": "Add to ZST (Fast)",
-                                    "ar": "إضافة إلى ZST (سريع)"
-                                },
-                                "command": "peazip -add2zst %file",
-                                "icon": "package-x-generic",
-                                "requires_binary": "peazip",
-                                "max_files": 100,
-                                "supported_extensions": [
-                                    ".txt", ".pdf", ".mp4", ".mkv", ".mp3", ".jpg", ".png"
-                                ]
+                                "name": { "en": "Add to TAR.ZST", "ar": "إضافة إلى TAR.ZST" },
+                                "command": "peazip -add2tzst %file"
+                            }
+                        ]
+                    },
+                    {
+                        "group": { "en": "Advanced & Security", "ar": "حماية ومتقدم" },
+                        "icon": "preferences-system-security",
+                        "items": [
+                            {
+                                "name": { "en": "Create Encrypted Archive", "ar": "إنشاء أرشيف مشفر" },
+                                "command": "peazip -add2crypt %file",
+                                "icon": "dialog-password"
+                            },
+                            {
+                                "name": { "en": "Create SFX Archive", "ar": "أرشيف ذاتي الاستخراج (SFX)" },
+                                "command": "peazip -add2sfx %file",
+                                "icon": "application-x-executable",
+                                "max_files": 1
+                            },
+                            {
+                                "name": { "en": "Split into Volumes", "ar": "تقسيم الملف إلى أجزاء" },
+                                "command": "peazip -add2split %file",
+                                "icon": "view-split-left-right",
+                                "max_files": 1
                             }
                         ]
                     }
