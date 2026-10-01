@@ -12,14 +12,19 @@ Name=PeaZip
 Name[ar]=بيزيب
 Icon=peazip
 Profiles=default;
-MimeTypes=application/octet-stream;application/vnd.wolfram.mathematica.package;inode/directory;text/plain;text/vnd.a;
+MimeTypes=application/octet-stream;inode/directory;
 TargetLocation=true
-Actions=Action0;Action1;
+Actions=Action0;Action1;Action2;Action3;Action4;Action5;Action6;Action7;Action8;
 
 [Desktop Action Action0]
-Name=Extract ▸ Extract Here
-Name[ar]=استخراج ▸ استخراج هنا
+Name=Add to Archive ▸ Add to Archive...
+Name[ar]=إضافة لأرشيف ▸ إضافة لأرشيف... (خيارات)
+Icon=archive-insert
 Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
+if ! command -v peazip >/dev/null 2>&1; then
+  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
+  exit 1
+fi
 for file in "$@"; do
   export file
   export dir="$(dirname "$file")"
@@ -31,7 +36,7 @@ for file in "$@"; do
   export count=$#
   _iter_script=$(mktemp)
   cat > "$_iter_script" << 'INNEREOF'
-peazip -ext2here "$file"
+peazip -add2archive "$file"
 INNEREOF
   bash "$_iter_script"
   rm -f "$_iter_script"
@@ -40,10 +45,14 @@ EOF
 sh "$_cm" "$@"; rm -f "$_cm"' -- %F
 
 [Desktop Action Action1]
-Name=Extract ▸ Extract to New Folder
-Name[ar]=استخراج ▸ استخراج لمجلد جديد
-Icon=folder-new
+Name=Add to Archive ▸ Add to ZIP
+Name[ar]=إضافة لأرشيف ▸ إضافة إلى ZIP
+Icon=package-x-generic
 Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
+if ! command -v peazip >/dev/null 2>&1; then
+  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
+  exit 1
+fi
 for file in "$@"; do
   export file
   export dir="$(dirname "$file")"
@@ -55,7 +64,203 @@ for file in "$@"; do
   export count=$#
   _iter_script=$(mktemp)
   cat > "$_iter_script" << 'INNEREOF'
-peazip -ext2folder "$file"
+peazip -add2zip "$file"
+INNEREOF
+  bash "$_iter_script"
+  rm -f "$_iter_script"
+done
+EOF
+sh "$_cm" "$@"; rm -f "$_cm"' -- %F
+
+[Desktop Action Action2]
+Name=Add to Archive ▸ Add to 7Z
+Name[ar]=إضافة لأرشيف ▸ إضافة إلى 7Z
+Icon=package-x-generic
+Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
+if ! command -v peazip >/dev/null 2>&1; then
+  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
+  exit 1
+fi
+for file in "$@"; do
+  export file
+  export dir="$(dirname "$file")"
+  export filename="$(basename "$file")"
+  ext="${filename##*.}"
+  [ "$ext" = "$filename" ] && ext=""
+  export ext
+  export basename="${filename%.*}"
+  export count=$#
+  _iter_script=$(mktemp)
+  cat > "$_iter_script" << 'INNEREOF'
+peazip -add27z "$file"
+INNEREOF
+  bash "$_iter_script"
+  rm -f "$_iter_script"
+done
+EOF
+sh "$_cm" "$@"; rm -f "$_cm"' -- %F
+
+[Desktop Action Action3]
+Name=Add to Archive ▸ Other Formats ▸ Add to TAR.GZ
+Name[ar]=إضافة لأرشيف ▸ صيغ أخرى ▸ إضافة إلى TAR.GZ
+Icon=package-x-generic
+Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
+if ! command -v peazip >/dev/null 2>&1; then
+  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
+  exit 1
+fi
+for file in "$@"; do
+  export file
+  export dir="$(dirname "$file")"
+  export filename="$(basename "$file")"
+  ext="${filename##*.}"
+  [ "$ext" = "$filename" ] && ext=""
+  export ext
+  export basename="${filename%.*}"
+  export count=$#
+  _iter_script=$(mktemp)
+  cat > "$_iter_script" << 'INNEREOF'
+peazip -add2gzip "$file"
+INNEREOF
+  bash "$_iter_script"
+  rm -f "$_iter_script"
+done
+EOF
+sh "$_cm" "$@"; rm -f "$_cm"' -- %F
+
+[Desktop Action Action4]
+Name=Add to Archive ▸ Other Formats ▸ Add to TAR.XZ
+Name[ar]=إضافة لأرشيف ▸ صيغ أخرى ▸ إضافة إلى TAR.XZ
+Icon=package-x-generic
+Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
+if ! command -v peazip >/dev/null 2>&1; then
+  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
+  exit 1
+fi
+for file in "$@"; do
+  export file
+  export dir="$(dirname "$file")"
+  export filename="$(basename "$file")"
+  ext="${filename##*.}"
+  [ "$ext" = "$filename" ] && ext=""
+  export ext
+  export basename="${filename%.*}"
+  export count=$#
+  _iter_script=$(mktemp)
+  cat > "$_iter_script" << 'INNEREOF'
+peazip -add2xz "$file"
+INNEREOF
+  bash "$_iter_script"
+  rm -f "$_iter_script"
+done
+EOF
+sh "$_cm" "$@"; rm -f "$_cm"' -- %F
+
+[Desktop Action Action5]
+Name=Add to Archive ▸ Other Formats ▸ Add to TAR.ZST
+Name[ar]=إضافة لأرشيف ▸ صيغ أخرى ▸ إضافة إلى TAR.ZST
+Icon=package-x-generic
+Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
+if ! command -v peazip >/dev/null 2>&1; then
+  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
+  exit 1
+fi
+for file in "$@"; do
+  export file
+  export dir="$(dirname "$file")"
+  export filename="$(basename "$file")"
+  ext="${filename##*.}"
+  [ "$ext" = "$filename" ] && ext=""
+  export ext
+  export basename="${filename%.*}"
+  export count=$#
+  _iter_script=$(mktemp)
+  cat > "$_iter_script" << 'INNEREOF'
+peazip -add2zstd "$file"
+INNEREOF
+  bash "$_iter_script"
+  rm -f "$_iter_script"
+done
+EOF
+sh "$_cm" "$@"; rm -f "$_cm"' -- %F
+
+[Desktop Action Action6]
+Name=Add to Archive ▸ Advanced & Security ▸ Create Encrypted Archive (PEA)
+Name[ar]=إضافة لأرشيف ▸ حماية ومتقدم ▸ إنشاء أرشيف مشفر (PEA)
+Icon=dialog-password
+Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
+if ! command -v peazip >/dev/null 2>&1; then
+  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
+  exit 1
+fi
+for file in "$@"; do
+  export file
+  export dir="$(dirname "$file")"
+  export filename="$(basename "$file")"
+  ext="${filename##*.}"
+  [ "$ext" = "$filename" ] && ext=""
+  export ext
+  export basename="${filename%.*}"
+  export count=$#
+  _iter_script=$(mktemp)
+  cat > "$_iter_script" << 'INNEREOF'
+peazip -add2crypt "$file"
+INNEREOF
+  bash "$_iter_script"
+  rm -f "$_iter_script"
+done
+EOF
+sh "$_cm" "$@"; rm -f "$_cm"' -- %F
+
+[Desktop Action Action7]
+Name=Add to Archive ▸ Advanced & Security ▸ Create SFX Archive (7Z)
+Name[ar]=إضافة لأرشيف ▸ حماية ومتقدم ▸ أرشيف ذاتي الاستخراج (SFX)
+Icon=application-x-executable
+Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
+if ! command -v peazip >/dev/null 2>&1; then
+  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
+  exit 1
+fi
+for file in "$@"; do
+  export file
+  export dir="$(dirname "$file")"
+  export filename="$(basename "$file")"
+  ext="${filename##*.}"
+  [ "$ext" = "$filename" ] && ext=""
+  export ext
+  export basename="${filename%.*}"
+  export count=$#
+  _iter_script=$(mktemp)
+  cat > "$_iter_script" << 'INNEREOF'
+peazip -add2sfx7z "$file"
+INNEREOF
+  bash "$_iter_script"
+  rm -f "$_iter_script"
+done
+EOF
+sh "$_cm" "$@"; rm -f "$_cm"' -- %F
+
+[Desktop Action Action8]
+Name=Add to Archive ▸ Advanced & Security ▸ Split into Volumes
+Name[ar]=إضافة لأرشيف ▸ حماية ومتقدم ▸ تقسيم الملف إلى أجزاء
+Icon=view-split-left-right
+Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
+if ! command -v peazip >/dev/null 2>&1; then
+  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
+  exit 1
+fi
+for file in "$@"; do
+  export file
+  export dir="$(dirname "$file")"
+  export filename="$(basename "$file")"
+  ext="${filename##*.}"
+  [ "$ext" = "$filename" ] && ext=""
+  export ext
+  export basename="${filename%.*}"
+  export count=$#
+  _iter_script=$(mktemp)
+  cat > "$_iter_script" << 'INNEREOF'
+peazip -add2split "$file"
 INNEREOF
   bash "$_iter_script"
   rm -f "$_iter_script"
