@@ -12,7 +12,7 @@ Name=PeaZip
 Name[ar]=بيزيب
 Icon=peazip
 Profiles=default;
-MimeTypes=application/octet-stream;application/vnd.ms-cab-compressed;application/vnd.rar;application/x-7z-compressed;application/x-tar;application/zip;application/zstd;inode/directory;
+MimeTypes=application/octet-stream;inode/directory;text/plain;text/vnd.a;
 TargetLocation=true
 Actions=Action0;
 
@@ -21,10 +21,6 @@ Name=Open Archive (GUI)
 Name[ar]=فتح الأرشيف (واجهة)
 Icon=peazip
 Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
-if ! command -v peazip >/dev/null 2>&1; then
-  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
-  exit 1
-fi
 for file in "$@"; do
   export file
   export dir="$(dirname "$file")"
