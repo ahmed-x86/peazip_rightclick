@@ -93,7 +93,10 @@ def _execute_cmds(cmds: list, show_output: bool, notify: bool, name: str, shell:
 # ---------------------------------------------------------------------------
 
 def _on_action_0(menu_item, files):
-    """Callback: Open Archive (GUI)"""
+    """Callback: Open Archive"""
+    if not shutil.which('peazip'):
+        _show_error(f"Required binary '{ 'peazip' }' not found.")
+        return
     cmds = []
     count = len(files)
     for file_item in files:
@@ -102,7 +105,7 @@ def _on_action_0(menu_item, files):
         _filename = os.path.basename(path)
         _basename, _ext = os.path.splitext(_filename)
         if _ext.startswith('.'): _ext = _ext[1:]
-        cmd = 'peazip %file'
+        cmd = 'peazip -ext2browse %file'
         cmd = cmd.replace('%count', str(count))
         cmd = cmd.replace('%filename', shlex.quote(_filename))
         cmd = cmd.replace('%basename', shlex.quote(_basename))
@@ -110,11 +113,14 @@ def _on_action_0(menu_item, files):
         cmd = cmd.replace('%dir', shlex.quote(_dir))
         cmd = cmd.replace('%file', shlex.quote(path))
         cmds.append(cmd)
-    _execute_cmds(cmds, show_output=False, notify=False, name='Open Archive (GUI)', shell=False)
+    _execute_cmds(cmds, show_output=False, notify=False, name='Open Archive', shell=False)
 
 
 def _on_action_1(menu_item, files):
     """Callback: Extract Here"""
+    if not shutil.which('peazip'):
+        _show_error(f"Required binary '{ 'peazip' }' not found.")
+        return
     cmds = []
     count = len(files)
     for file_item in files:
@@ -135,7 +141,10 @@ def _on_action_1(menu_item, files):
 
 
 def _on_action_2(menu_item, files):
-    """Callback: Extract to New Folder"""
+    """Callback: Extract to Folder"""
+    if not shutil.which('peazip'):
+        _show_error(f"Required binary '{ 'peazip' }' not found.")
+        return
     cmds = []
     count = len(files)
     for file_item in files:
@@ -144,7 +153,7 @@ def _on_action_2(menu_item, files):
         _filename = os.path.basename(path)
         _basename, _ext = os.path.splitext(_filename)
         if _ext.startswith('.'): _ext = _ext[1:]
-        cmd = 'peazip -ext2folder %file'
+        cmd = 'peazip -ext2newfolder %file'
         cmd = cmd.replace('%count', str(count))
         cmd = cmd.replace('%filename', shlex.quote(_filename))
         cmd = cmd.replace('%basename', shlex.quote(_basename))
@@ -152,11 +161,14 @@ def _on_action_2(menu_item, files):
         cmd = cmd.replace('%dir', shlex.quote(_dir))
         cmd = cmd.replace('%file', shlex.quote(path))
         cmds.append(cmd)
-    _execute_cmds(cmds, show_output=False, notify=False, name='Extract to New Folder', shell=False)
+    _execute_cmds(cmds, show_output=False, notify=False, name='Extract to Folder', shell=False)
 
 
 def _on_action_3(menu_item, files):
-    """Callback: Extract... (Choose)"""
+    """Callback: Extract to... (Choose Folder)"""
+    if not shutil.which('peazip'):
+        _show_error(f"Required binary '{ 'peazip' }' not found.")
+        return
     cmds = []
     count = len(files)
     for file_item in files:
@@ -165,7 +177,7 @@ def _on_action_3(menu_item, files):
         _filename = os.path.basename(path)
         _basename, _ext = os.path.splitext(_filename)
         if _ext.startswith('.'): _ext = _ext[1:]
-        cmd = 'peazip -ext2here %file -gui'
+        cmd = 'fm=$(xdg-mime query default inode/directory 2>/dev/null); case "$fm" in *dolphin*|*kde*|*qt*|*konqueror*) pick=kdialog;; *) pick=zenity;; esac; command -v "$pick" >/dev/null 2>&1 || { pick=zenity; command -v zenity >/dev/null 2>&1 || pick=kdialog; }; if [ "$pick" = kdialog ]; then out=$(kdialog --getexistingdirectory %dir/); else out=$(zenity --file-selection --directory --title="PeaZip" --filename=%dir/); fi; [ -n "$out" ] && peazip -ext2here -o "$out" %file'
         cmd = cmd.replace('%count', str(count))
         cmd = cmd.replace('%filename', shlex.quote(_filename))
         cmd = cmd.replace('%basename', shlex.quote(_basename))
@@ -173,11 +185,86 @@ def _on_action_3(menu_item, files):
         cmd = cmd.replace('%dir', shlex.quote(_dir))
         cmd = cmd.replace('%file', shlex.quote(path))
         cmds.append(cmd)
-    _execute_cmds(cmds, show_output=False, notify=False, name='Extract... (Choose)', shell=False)
+    _execute_cmds(cmds, show_output=False, notify=False, name='Extract to... (Choose Folder)', shell=True)
 
 
 def _on_action_4(menu_item, files):
+    """Callback: Extract with Options..."""
+    if not shutil.which('peazip'):
+        _show_error(f"Required binary '{ 'peazip' }' not found.")
+        return
+    cmds = []
+    count = len(files)
+    for file_item in files:
+        path = _path_from_item(file_item)
+        _dir = os.path.dirname(path)
+        _filename = os.path.basename(path)
+        _basename, _ext = os.path.splitext(_filename)
+        if _ext.startswith('.'): _ext = _ext[1:]
+        cmd = 'peazip -ext2main %file'
+        cmd = cmd.replace('%count', str(count))
+        cmd = cmd.replace('%filename', shlex.quote(_filename))
+        cmd = cmd.replace('%basename', shlex.quote(_basename))
+        cmd = cmd.replace('%ext', shlex.quote(_ext))
+        cmd = cmd.replace('%dir', shlex.quote(_dir))
+        cmd = cmd.replace('%file', shlex.quote(path))
+        cmds.append(cmd)
+    _execute_cmds(cmds, show_output=False, notify=False, name='Extract with Options...', shell=False)
+
+
+def _on_action_5(menu_item, files):
+    """Callback: Test Archive"""
+    if not shutil.which('peazip'):
+        _show_error(f"Required binary '{ 'peazip' }' not found.")
+        return
+    cmds = []
+    count = len(files)
+    for file_item in files:
+        path = _path_from_item(file_item)
+        _dir = os.path.dirname(path)
+        _filename = os.path.basename(path)
+        _basename, _ext = os.path.splitext(_filename)
+        if _ext.startswith('.'): _ext = _ext[1:]
+        cmd = 'peazip -ext2test %file'
+        cmd = cmd.replace('%count', str(count))
+        cmd = cmd.replace('%filename', shlex.quote(_filename))
+        cmd = cmd.replace('%basename', shlex.quote(_basename))
+        cmd = cmd.replace('%ext', shlex.quote(_ext))
+        cmd = cmd.replace('%dir', shlex.quote(_dir))
+        cmd = cmd.replace('%file', shlex.quote(path))
+        cmds.append(cmd)
+    _execute_cmds(cmds, show_output=False, notify=False, name='Test Archive', shell=False)
+
+
+def _on_action_6(menu_item, files):
+    """Callback: Add to Archive..."""
+    if not shutil.which('peazip'):
+        _show_error(f"Required binary '{ 'peazip' }' not found.")
+        return
+    cmds = []
+    count = len(files)
+    for file_item in files:
+        path = _path_from_item(file_item)
+        _dir = os.path.dirname(path)
+        _filename = os.path.basename(path)
+        _basename, _ext = os.path.splitext(_filename)
+        if _ext.startswith('.'): _ext = _ext[1:]
+        cmd = 'peazip -add2archive %file'
+        cmd = cmd.replace('%count', str(count))
+        cmd = cmd.replace('%filename', shlex.quote(_filename))
+        cmd = cmd.replace('%basename', shlex.quote(_basename))
+        cmd = cmd.replace('%ext', shlex.quote(_ext))
+        cmd = cmd.replace('%dir', shlex.quote(_dir))
+        cmd = cmd.replace('%file', shlex.quote(path))
+        cmds.append(cmd)
+    _execute_cmds(cmds, show_output=False, notify=False, name='Add to Archive...', shell=False)
+
+
+def _on_action_7(menu_item, files):
     """Callback: Add to ZIP"""
+    if not shutil.which('peazip'):
+        _show_error(f"Required binary '{ 'peazip' }' not found.")
+        return
     cmds = []
     count = len(files)
     for file_item in files:
@@ -197,8 +284,11 @@ def _on_action_4(menu_item, files):
     _execute_cmds(cmds, show_output=False, notify=False, name='Add to ZIP', shell=False)
 
 
-def _on_action_5(menu_item, files):
+def _on_action_8(menu_item, files):
     """Callback: Add to 7Z"""
+    if not shutil.which('peazip'):
+        _show_error(f"Required binary '{ 'peazip' }' not found.")
+        return
     cmds = []
     count = len(files)
     for file_item in files:
@@ -218,8 +308,11 @@ def _on_action_5(menu_item, files):
     _execute_cmds(cmds, show_output=False, notify=False, name='Add to 7Z', shell=False)
 
 
-def _on_action_6(menu_item, files):
+def _on_action_9(menu_item, files):
     """Callback: Add to TAR.GZ"""
+    if not shutil.which('peazip'):
+        _show_error(f"Required binary '{ 'peazip' }' not found.")
+        return
     cmds = []
     count = len(files)
     for file_item in files:
@@ -228,7 +321,7 @@ def _on_action_6(menu_item, files):
         _filename = os.path.basename(path)
         _basename, _ext = os.path.splitext(_filename)
         if _ext.startswith('.'): _ext = _ext[1:]
-        cmd = 'peazip -add2tgz %file'
+        cmd = 'peazip -add2gzip %file'
         cmd = cmd.replace('%count', str(count))
         cmd = cmd.replace('%filename', shlex.quote(_filename))
         cmd = cmd.replace('%basename', shlex.quote(_basename))
@@ -239,8 +332,11 @@ def _on_action_6(menu_item, files):
     _execute_cmds(cmds, show_output=False, notify=False, name='Add to TAR.GZ', shell=False)
 
 
-def _on_action_7(menu_item, files):
-    """Callback: Add to TAR.ZST"""
+def _on_action_10(menu_item, files):
+    """Callback: Add to TAR.XZ"""
+    if not shutil.which('peazip'):
+        _show_error(f"Required binary '{ 'peazip' }' not found.")
+        return
     cmds = []
     count = len(files)
     for file_item in files:
@@ -249,7 +345,31 @@ def _on_action_7(menu_item, files):
         _filename = os.path.basename(path)
         _basename, _ext = os.path.splitext(_filename)
         if _ext.startswith('.'): _ext = _ext[1:]
-        cmd = 'peazip -add2tzst %file'
+        cmd = 'peazip -add2xz %file'
+        cmd = cmd.replace('%count', str(count))
+        cmd = cmd.replace('%filename', shlex.quote(_filename))
+        cmd = cmd.replace('%basename', shlex.quote(_basename))
+        cmd = cmd.replace('%ext', shlex.quote(_ext))
+        cmd = cmd.replace('%dir', shlex.quote(_dir))
+        cmd = cmd.replace('%file', shlex.quote(path))
+        cmds.append(cmd)
+    _execute_cmds(cmds, show_output=False, notify=False, name='Add to TAR.XZ', shell=False)
+
+
+def _on_action_11(menu_item, files):
+    """Callback: Add to TAR.ZST"""
+    if not shutil.which('peazip'):
+        _show_error(f"Required binary '{ 'peazip' }' not found.")
+        return
+    cmds = []
+    count = len(files)
+    for file_item in files:
+        path = _path_from_item(file_item)
+        _dir = os.path.dirname(path)
+        _filename = os.path.basename(path)
+        _basename, _ext = os.path.splitext(_filename)
+        if _ext.startswith('.'): _ext = _ext[1:]
+        cmd = 'peazip -add2zstd %file'
         cmd = cmd.replace('%count', str(count))
         cmd = cmd.replace('%filename', shlex.quote(_filename))
         cmd = cmd.replace('%basename', shlex.quote(_basename))
@@ -260,8 +380,11 @@ def _on_action_7(menu_item, files):
     _execute_cmds(cmds, show_output=False, notify=False, name='Add to TAR.ZST', shell=False)
 
 
-def _on_action_8(menu_item, files):
-    """Callback: Create Encrypted Archive"""
+def _on_action_12(menu_item, files):
+    """Callback: Create Encrypted Archive (PEA)"""
+    if not shutil.which('peazip'):
+        _show_error(f"Required binary '{ 'peazip' }' not found.")
+        return
     cmds = []
     count = len(files)
     for file_item in files:
@@ -278,11 +401,14 @@ def _on_action_8(menu_item, files):
         cmd = cmd.replace('%dir', shlex.quote(_dir))
         cmd = cmd.replace('%file', shlex.quote(path))
         cmds.append(cmd)
-    _execute_cmds(cmds, show_output=False, notify=False, name='Create Encrypted Archive', shell=False)
+    _execute_cmds(cmds, show_output=False, notify=False, name='Create Encrypted Archive (PEA)', shell=False)
 
 
-def _on_action_9(menu_item, files):
-    """Callback: Create SFX Archive"""
+def _on_action_13(menu_item, files):
+    """Callback: Create SFX Archive (7Z)"""
+    if not shutil.which('peazip'):
+        _show_error(f"Required binary '{ 'peazip' }' not found.")
+        return
     cmds = []
     count = len(files)
     for file_item in files:
@@ -291,7 +417,7 @@ def _on_action_9(menu_item, files):
         _filename = os.path.basename(path)
         _basename, _ext = os.path.splitext(_filename)
         if _ext.startswith('.'): _ext = _ext[1:]
-        cmd = 'peazip -add2sfx %file'
+        cmd = 'peazip -add2sfx7z %file'
         cmd = cmd.replace('%count', str(count))
         cmd = cmd.replace('%filename', shlex.quote(_filename))
         cmd = cmd.replace('%basename', shlex.quote(_basename))
@@ -299,11 +425,14 @@ def _on_action_9(menu_item, files):
         cmd = cmd.replace('%dir', shlex.quote(_dir))
         cmd = cmd.replace('%file', shlex.quote(path))
         cmds.append(cmd)
-    _execute_cmds(cmds, show_output=False, notify=False, name='Create SFX Archive', shell=False)
+    _execute_cmds(cmds, show_output=False, notify=False, name='Create SFX Archive (7Z)', shell=False)
 
 
-def _on_action_10(menu_item, files):
+def _on_action_14(menu_item, files):
     """Callback: Split into Volumes"""
+    if not shutil.which('peazip'):
+        _show_error(f"Required binary '{ 'peazip' }' not found.")
+        return
     cmds = []
     count = len(files)
     for file_item in files:
@@ -356,7 +485,7 @@ class PeazipmenuExtension(GObject.GObject, Thunarx.MenuProvider):
         items_added = 0
         # --- Menu Tree Setup ---
         menus = {'': submenu}
-        item_0_exts = ('.@', '.a', '.l', '.l', '._', '.a', '.r', '.c', '.h', '.i', '.v', '.e', '.s')
+        item_0_exts = ('.zip', '.7z', '.rar', '.tar', '.gz', '.bz2', '.xz', '.zst', '.tgz', '.tbz2', '.txz', '.tzst', '.001', '.iso', '.cab', '.arj')
         item_0_allow_all = False
         show_item_0 = False
 
@@ -372,14 +501,14 @@ class PeazipmenuExtension(GObject.GObject, Thunarx.MenuProvider):
         if show_item_0:
             item_0 = Thunarx.MenuItem(
                 name="PeaZipMenu::Action0",
-                label=_localize({'en': 'Open Archive (GUI)', 'ar': 'فتح الأرشيف (واجهة)'}),
-                tip=_localize({'en': 'Open Archive (GUI)', 'ar': 'فتح الأرشيف (واجهة)'}),
+                label=_localize({'en': 'Open Archive', 'ar': 'فتح الأرشيف'}),
+                tip=_localize({'en': 'Open Archive', 'ar': 'فتح الأرشيف'}),
                 icon="peazip",
             )
             item_0.connect("activate", _on_action_0, files)
             menus[''].append_item(item_0)
             items_added += 1
-        item_1_exts = ('.@', '.c', '.o', '.m', '.m', '.o', '.n', '._', '.a', '.r', '.c', '.h', '.i', '.v', '.e', '.s')
+        item_1_exts = ('.zip', '.7z', '.rar', '.tar', '.gz', '.bz2', '.xz', '.zst', '.tgz', '.tbz2', '.txz', '.tzst', '.001', '.iso', '.cab', '.arj')
         item_1_allow_all = False
         show_item_1 = False
 
@@ -403,12 +532,12 @@ class PeazipmenuExtension(GObject.GObject, Thunarx.MenuProvider):
                 name="PeaZipMenu::Action1",
                 label=_localize({'en': 'Extract Here', 'ar': 'استخراج هنا'}),
                 tip=_localize({'en': 'Extract Here', 'ar': 'استخراج هنا'}),
-                icon="",
+                icon="archive-extract",
             )
             item_1.connect("activate", _on_action_1, files)
             menus['Extract'].append_item(item_1)
             items_added += 1
-        item_2_exts = ('.@', '.c', '.o', '.m', '.m', '.o', '.n', '._', '.a', '.r', '.c', '.h', '.i', '.v', '.e', '.s')
+        item_2_exts = ('.zip', '.7z', '.rar', '.tar', '.gz', '.bz2', '.xz', '.zst', '.tgz', '.tbz2', '.txz', '.tzst', '.001', '.iso', '.cab', '.arj')
         item_2_allow_all = False
         show_item_2 = False
 
@@ -430,14 +559,14 @@ class PeazipmenuExtension(GObject.GObject, Thunarx.MenuProvider):
                 menus['Extract'] = group_menu
             item_2 = Thunarx.MenuItem(
                 name="PeaZipMenu::Action2",
-                label=_localize({'en': 'Extract to New Folder', 'ar': 'استخراج لمجلد جديد'}),
-                tip=_localize({'en': 'Extract to New Folder', 'ar': 'استخراج لمجلد جديد'}),
+                label=_localize({'en': 'Extract to Folder', 'ar': 'استخراج إلى مجلد'}),
+                tip=_localize({'en': 'Extract to Folder', 'ar': 'استخراج إلى مجلد'}),
                 icon="folder-new",
             )
             item_2.connect("activate", _on_action_2, files)
             menus['Extract'].append_item(item_2)
             items_added += 1
-        item_3_exts = ('.@', '.b', '.a', '.s', '.i', '.c', '._', '.a', '.r', '.c', '.h', '.i', '.v', '.e', '.s')
+        item_3_exts = ('.zip', '.7z', '.rar', '.tar', '.gz', '.bz2', '.xz', '.zst', '.tgz', '.tbz2', '.txz', '.tzst', '.001', '.iso', '.cab', '.arj')
         item_3_allow_all = False
         show_item_3 = False
 
@@ -459,18 +588,18 @@ class PeazipmenuExtension(GObject.GObject, Thunarx.MenuProvider):
                 menus['Extract'] = group_menu
             item_3 = Thunarx.MenuItem(
                 name="PeaZipMenu::Action3",
-                label=_localize({'en': 'Extract... (Choose)', 'ar': 'استخراج... (اختيار المكان)'}),
-                tip=_localize({'en': 'Extract... (Choose)', 'ar': 'استخراج... (اختيار المكان)'}),
-                icon="folder-remote",
+                label=_localize({'en': 'Extract to... (Choose Folder)', 'ar': 'استخراج إلى... (اختيار المجلد)'}),
+                tip=_localize({'en': 'Extract to... (Choose Folder)', 'ar': 'استخراج إلى... (اختيار المجلد)'}),
+                icon="folder-open",
             )
             item_3.connect("activate", _on_action_3, files)
             menus['Extract'].append_item(item_3)
             items_added += 1
-        item_4_exts = ()
-        item_4_allow_all = True
+        item_4_exts = ('.zip', '.7z', '.rar', '.tar', '.gz', '.bz2', '.xz', '.zst', '.tgz', '.tbz2', '.txz', '.tzst', '.001', '.iso', '.cab', '.arj')
+        item_4_allow_all = False
         show_item_4 = False
 
-        if 0 <= len(files) <= 999999:
+        if 0 <= len(files) <= 20:
             if has_dir and allow_dirs:
                 show_item_4 = True
             elif has_file:
@@ -480,26 +609,26 @@ class PeazipmenuExtension(GObject.GObject, Thunarx.MenuProvider):
                     show_item_4 = any(any(p.lower().endswith(ext) for ext in item_4_exts) for p in paths if not os.path.isdir(p))
 
         if show_item_4:
-            if 'Add to Archive' not in menus:
-                group_item = Thunarx.MenuItem(name='PeaZipMenu::Add to Archive', label=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), tip=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), icon='archive-insert')
+            if 'Extract' not in menus:
+                group_item = Thunarx.MenuItem(name='PeaZipMenu::Extract', label=_localize({'en': 'Extract', 'ar': 'استخراج'}), tip=_localize({'en': 'Extract', 'ar': 'استخراج'}), icon='archive-extract')
                 group_menu = Thunarx.Menu()
                 group_item.set_submenu(group_menu)
                 menus[''].append_item(group_item)
-                menus['Add to Archive'] = group_menu
+                menus['Extract'] = group_menu
             item_4 = Thunarx.MenuItem(
                 name="PeaZipMenu::Action4",
-                label=_localize({'en': 'Add to ZIP', 'ar': 'إضافة إلى ZIP'}),
-                tip=_localize({'en': 'Add to ZIP', 'ar': 'إضافة إلى ZIP'}),
-                icon="",
+                label=_localize({'en': 'Extract with Options...', 'ar': 'استخراج بخيارات...'}),
+                tip=_localize({'en': 'Extract with Options...', 'ar': 'استخراج بخيارات...'}),
+                icon="preferences-system",
             )
             item_4.connect("activate", _on_action_4, files)
-            menus['Add to Archive'].append_item(item_4)
+            menus['Extract'].append_item(item_4)
             items_added += 1
-        item_5_exts = ()
-        item_5_allow_all = True
+        item_5_exts = ('.zip', '.7z', '.rar', '.tar', '.gz', '.bz2', '.xz', '.zst', '.tgz', '.tbz2', '.txz', '.tzst', '.001', '.iso', '.cab', '.arj')
+        item_5_allow_all = False
         show_item_5 = False
 
-        if 0 <= len(files) <= 999999:
+        if 0 <= len(files) <= 20:
             if has_dir and allow_dirs:
                 show_item_5 = True
             elif has_file:
@@ -509,26 +638,26 @@ class PeazipmenuExtension(GObject.GObject, Thunarx.MenuProvider):
                     show_item_5 = any(any(p.lower().endswith(ext) for ext in item_5_exts) for p in paths if not os.path.isdir(p))
 
         if show_item_5:
-            if 'Add to Archive' not in menus:
-                group_item = Thunarx.MenuItem(name='PeaZipMenu::Add to Archive', label=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), tip=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), icon='archive-insert')
+            if 'Extract' not in menus:
+                group_item = Thunarx.MenuItem(name='PeaZipMenu::Extract', label=_localize({'en': 'Extract', 'ar': 'استخراج'}), tip=_localize({'en': 'Extract', 'ar': 'استخراج'}), icon='archive-extract')
                 group_menu = Thunarx.Menu()
                 group_item.set_submenu(group_menu)
                 menus[''].append_item(group_item)
-                menus['Add to Archive'] = group_menu
+                menus['Extract'] = group_menu
             item_5 = Thunarx.MenuItem(
                 name="PeaZipMenu::Action5",
-                label=_localize({'en': 'Add to 7Z', 'ar': 'إضافة إلى 7Z'}),
-                tip=_localize({'en': 'Add to 7Z', 'ar': 'إضافة إلى 7Z'}),
-                icon="",
+                label=_localize({'en': 'Test Archive', 'ar': 'فحص الأرشيف'}),
+                tip=_localize({'en': 'Test Archive', 'ar': 'فحص الأرشيف'}),
+                icon="emblem-ok-symbolic",
             )
             item_5.connect("activate", _on_action_5, files)
-            menus['Add to Archive'].append_item(item_5)
+            menus['Extract'].append_item(item_5)
             items_added += 1
         item_6_exts = ()
         item_6_allow_all = True
         show_item_6 = False
 
-        if 0 <= len(files) <= 999999:
+        if 0 <= len(files) <= 100:
             if has_dir and allow_dirs:
                 show_item_6 = True
             elif has_file:
@@ -544,26 +673,20 @@ class PeazipmenuExtension(GObject.GObject, Thunarx.MenuProvider):
                 group_item.set_submenu(group_menu)
                 menus[''].append_item(group_item)
                 menus['Add to Archive'] = group_menu
-            if 'Add to Archive/Linux & Pro' not in menus:
-                group_item = Thunarx.MenuItem(name='PeaZipMenu::Add to Archive/Linux & Pro', label=_localize({'en': 'Linux & Pro', 'ar': 'لينكس واحترافي'}), tip=_localize({'en': 'Linux & Pro', 'ar': 'لينكس واحترافي'}))
-                group_menu = Thunarx.Menu()
-                group_item.set_submenu(group_menu)
-                menus['Add to Archive'].append_item(group_item)
-                menus['Add to Archive/Linux & Pro'] = group_menu
             item_6 = Thunarx.MenuItem(
                 name="PeaZipMenu::Action6",
-                label=_localize({'en': 'Add to TAR.GZ', 'ar': 'إضافة إلى TAR.GZ'}),
-                tip=_localize({'en': 'Add to TAR.GZ', 'ar': 'إضافة إلى TAR.GZ'}),
-                icon="",
+                label=_localize({'en': 'Add to Archive...', 'ar': 'إضافة لأرشيف... (خيارات)'}),
+                tip=_localize({'en': 'Add to Archive...', 'ar': 'إضافة لأرشيف... (خيارات)'}),
+                icon="archive-insert",
             )
             item_6.connect("activate", _on_action_6, files)
-            menus['Add to Archive/Linux & Pro'].append_item(item_6)
+            menus['Add to Archive'].append_item(item_6)
             items_added += 1
         item_7_exts = ()
         item_7_allow_all = True
         show_item_7 = False
 
-        if 0 <= len(files) <= 999999:
+        if 0 <= len(files) <= 100:
             if has_dir and allow_dirs:
                 show_item_7 = True
             elif has_file:
@@ -579,26 +702,20 @@ class PeazipmenuExtension(GObject.GObject, Thunarx.MenuProvider):
                 group_item.set_submenu(group_menu)
                 menus[''].append_item(group_item)
                 menus['Add to Archive'] = group_menu
-            if 'Add to Archive/Linux & Pro' not in menus:
-                group_item = Thunarx.MenuItem(name='PeaZipMenu::Add to Archive/Linux & Pro', label=_localize({'en': 'Linux & Pro', 'ar': 'لينكس واحترافي'}), tip=_localize({'en': 'Linux & Pro', 'ar': 'لينكس واحترافي'}))
-                group_menu = Thunarx.Menu()
-                group_item.set_submenu(group_menu)
-                menus['Add to Archive'].append_item(group_item)
-                menus['Add to Archive/Linux & Pro'] = group_menu
             item_7 = Thunarx.MenuItem(
                 name="PeaZipMenu::Action7",
-                label=_localize({'en': 'Add to TAR.ZST', 'ar': 'إضافة إلى TAR.ZST'}),
-                tip=_localize({'en': 'Add to TAR.ZST', 'ar': 'إضافة إلى TAR.ZST'}),
-                icon="",
+                label=_localize({'en': 'Add to ZIP', 'ar': 'إضافة إلى ZIP'}),
+                tip=_localize({'en': 'Add to ZIP', 'ar': 'إضافة إلى ZIP'}),
+                icon="package-x-generic",
             )
             item_7.connect("activate", _on_action_7, files)
-            menus['Add to Archive/Linux & Pro'].append_item(item_7)
+            menus['Add to Archive'].append_item(item_7)
             items_added += 1
         item_8_exts = ()
         item_8_allow_all = True
         show_item_8 = False
 
-        if 0 <= len(files) <= 999999:
+        if 0 <= len(files) <= 100:
             if has_dir and allow_dirs:
                 show_item_8 = True
             elif has_file:
@@ -614,26 +731,20 @@ class PeazipmenuExtension(GObject.GObject, Thunarx.MenuProvider):
                 group_item.set_submenu(group_menu)
                 menus[''].append_item(group_item)
                 menus['Add to Archive'] = group_menu
-            if 'Add to Archive/Advanced & Security' not in menus:
-                group_item = Thunarx.MenuItem(name='PeaZipMenu::Add to Archive/Advanced & Security', label=_localize({'en': 'Advanced & Security', 'ar': 'حماية ومتقدم'}), tip=_localize({'en': 'Advanced & Security', 'ar': 'حماية ومتقدم'}), icon='preferences-system-security')
-                group_menu = Thunarx.Menu()
-                group_item.set_submenu(group_menu)
-                menus['Add to Archive'].append_item(group_item)
-                menus['Add to Archive/Advanced & Security'] = group_menu
             item_8 = Thunarx.MenuItem(
                 name="PeaZipMenu::Action8",
-                label=_localize({'en': 'Create Encrypted Archive', 'ar': 'إنشاء أرشيف مشفر'}),
-                tip=_localize({'en': 'Create Encrypted Archive', 'ar': 'إنشاء أرشيف مشفر'}),
-                icon="dialog-password",
+                label=_localize({'en': 'Add to 7Z', 'ar': 'إضافة إلى 7Z'}),
+                tip=_localize({'en': 'Add to 7Z', 'ar': 'إضافة إلى 7Z'}),
+                icon="package-x-generic",
             )
             item_8.connect("activate", _on_action_8, files)
-            menus['Add to Archive/Advanced & Security'].append_item(item_8)
+            menus['Add to Archive'].append_item(item_8)
             items_added += 1
         item_9_exts = ()
         item_9_allow_all = True
         show_item_9 = False
 
-        if 0 <= len(files) <= 1:
+        if 0 <= len(files) <= 100:
             if has_dir and allow_dirs:
                 show_item_9 = True
             elif has_file:
@@ -649,26 +760,26 @@ class PeazipmenuExtension(GObject.GObject, Thunarx.MenuProvider):
                 group_item.set_submenu(group_menu)
                 menus[''].append_item(group_item)
                 menus['Add to Archive'] = group_menu
-            if 'Add to Archive/Advanced & Security' not in menus:
-                group_item = Thunarx.MenuItem(name='PeaZipMenu::Add to Archive/Advanced & Security', label=_localize({'en': 'Advanced & Security', 'ar': 'حماية ومتقدم'}), tip=_localize({'en': 'Advanced & Security', 'ar': 'حماية ومتقدم'}), icon='preferences-system-security')
+            if 'Add to Archive/Other Formats' not in menus:
+                group_item = Thunarx.MenuItem(name='PeaZipMenu::Add to Archive/Other Formats', label=_localize({'en': 'Other Formats', 'ar': 'صيغ أخرى'}), tip=_localize({'en': 'Other Formats', 'ar': 'صيغ أخرى'}), icon='package-x-generic')
                 group_menu = Thunarx.Menu()
                 group_item.set_submenu(group_menu)
                 menus['Add to Archive'].append_item(group_item)
-                menus['Add to Archive/Advanced & Security'] = group_menu
+                menus['Add to Archive/Other Formats'] = group_menu
             item_9 = Thunarx.MenuItem(
                 name="PeaZipMenu::Action9",
-                label=_localize({'en': 'Create SFX Archive', 'ar': 'أرشيف ذاتي الاستخراج (SFX)'}),
-                tip=_localize({'en': 'Create SFX Archive', 'ar': 'أرشيف ذاتي الاستخراج (SFX)'}),
-                icon="application-x-executable",
+                label=_localize({'en': 'Add to TAR.GZ', 'ar': 'إضافة إلى TAR.GZ'}),
+                tip=_localize({'en': 'Add to TAR.GZ', 'ar': 'إضافة إلى TAR.GZ'}),
+                icon="package-x-generic",
             )
             item_9.connect("activate", _on_action_9, files)
-            menus['Add to Archive/Advanced & Security'].append_item(item_9)
+            menus['Add to Archive/Other Formats'].append_item(item_9)
             items_added += 1
         item_10_exts = ()
         item_10_allow_all = True
         show_item_10 = False
 
-        if 0 <= len(files) <= 1:
+        if 0 <= len(files) <= 100:
             if has_dir and allow_dirs:
                 show_item_10 = True
             elif has_file:
@@ -684,20 +795,160 @@ class PeazipmenuExtension(GObject.GObject, Thunarx.MenuProvider):
                 group_item.set_submenu(group_menu)
                 menus[''].append_item(group_item)
                 menus['Add to Archive'] = group_menu
+            if 'Add to Archive/Other Formats' not in menus:
+                group_item = Thunarx.MenuItem(name='PeaZipMenu::Add to Archive/Other Formats', label=_localize({'en': 'Other Formats', 'ar': 'صيغ أخرى'}), tip=_localize({'en': 'Other Formats', 'ar': 'صيغ أخرى'}), icon='package-x-generic')
+                group_menu = Thunarx.Menu()
+                group_item.set_submenu(group_menu)
+                menus['Add to Archive'].append_item(group_item)
+                menus['Add to Archive/Other Formats'] = group_menu
+            item_10 = Thunarx.MenuItem(
+                name="PeaZipMenu::Action10",
+                label=_localize({'en': 'Add to TAR.XZ', 'ar': 'إضافة إلى TAR.XZ'}),
+                tip=_localize({'en': 'Add to TAR.XZ', 'ar': 'إضافة إلى TAR.XZ'}),
+                icon="package-x-generic",
+            )
+            item_10.connect("activate", _on_action_10, files)
+            menus['Add to Archive/Other Formats'].append_item(item_10)
+            items_added += 1
+        item_11_exts = ()
+        item_11_allow_all = True
+        show_item_11 = False
+
+        if 0 <= len(files) <= 100:
+            if has_dir and allow_dirs:
+                show_item_11 = True
+            elif has_file:
+                if item_11_allow_all:
+                    show_item_11 = True
+                else:
+                    show_item_11 = any(any(p.lower().endswith(ext) for ext in item_11_exts) for p in paths if not os.path.isdir(p))
+
+        if show_item_11:
+            if 'Add to Archive' not in menus:
+                group_item = Thunarx.MenuItem(name='PeaZipMenu::Add to Archive', label=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), tip=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), icon='archive-insert')
+                group_menu = Thunarx.Menu()
+                group_item.set_submenu(group_menu)
+                menus[''].append_item(group_item)
+                menus['Add to Archive'] = group_menu
+            if 'Add to Archive/Other Formats' not in menus:
+                group_item = Thunarx.MenuItem(name='PeaZipMenu::Add to Archive/Other Formats', label=_localize({'en': 'Other Formats', 'ar': 'صيغ أخرى'}), tip=_localize({'en': 'Other Formats', 'ar': 'صيغ أخرى'}), icon='package-x-generic')
+                group_menu = Thunarx.Menu()
+                group_item.set_submenu(group_menu)
+                menus['Add to Archive'].append_item(group_item)
+                menus['Add to Archive/Other Formats'] = group_menu
+            item_11 = Thunarx.MenuItem(
+                name="PeaZipMenu::Action11",
+                label=_localize({'en': 'Add to TAR.ZST', 'ar': 'إضافة إلى TAR.ZST'}),
+                tip=_localize({'en': 'Add to TAR.ZST', 'ar': 'إضافة إلى TAR.ZST'}),
+                icon="package-x-generic",
+            )
+            item_11.connect("activate", _on_action_11, files)
+            menus['Add to Archive/Other Formats'].append_item(item_11)
+            items_added += 1
+        item_12_exts = ()
+        item_12_allow_all = True
+        show_item_12 = False
+
+        if 0 <= len(files) <= 100:
+            if has_dir and allow_dirs:
+                show_item_12 = True
+            elif has_file:
+                if item_12_allow_all:
+                    show_item_12 = True
+                else:
+                    show_item_12 = any(any(p.lower().endswith(ext) for ext in item_12_exts) for p in paths if not os.path.isdir(p))
+
+        if show_item_12:
+            if 'Add to Archive' not in menus:
+                group_item = Thunarx.MenuItem(name='PeaZipMenu::Add to Archive', label=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), tip=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), icon='archive-insert')
+                group_menu = Thunarx.Menu()
+                group_item.set_submenu(group_menu)
+                menus[''].append_item(group_item)
+                menus['Add to Archive'] = group_menu
             if 'Add to Archive/Advanced & Security' not in menus:
                 group_item = Thunarx.MenuItem(name='PeaZipMenu::Add to Archive/Advanced & Security', label=_localize({'en': 'Advanced & Security', 'ar': 'حماية ومتقدم'}), tip=_localize({'en': 'Advanced & Security', 'ar': 'حماية ومتقدم'}), icon='preferences-system-security')
                 group_menu = Thunarx.Menu()
                 group_item.set_submenu(group_menu)
                 menus['Add to Archive'].append_item(group_item)
                 menus['Add to Archive/Advanced & Security'] = group_menu
-            item_10 = Thunarx.MenuItem(
-                name="PeaZipMenu::Action10",
+            item_12 = Thunarx.MenuItem(
+                name="PeaZipMenu::Action12",
+                label=_localize({'en': 'Create Encrypted Archive (PEA)', 'ar': 'إنشاء أرشيف مشفر (PEA)'}),
+                tip=_localize({'en': 'Create Encrypted Archive (PEA)', 'ar': 'إنشاء أرشيف مشفر (PEA)'}),
+                icon="dialog-password",
+            )
+            item_12.connect("activate", _on_action_12, files)
+            menus['Add to Archive/Advanced & Security'].append_item(item_12)
+            items_added += 1
+        item_13_exts = ()
+        item_13_allow_all = True
+        show_item_13 = False
+
+        if 0 <= len(files) <= 100:
+            if has_dir and allow_dirs:
+                show_item_13 = True
+            elif has_file:
+                if item_13_allow_all:
+                    show_item_13 = True
+                else:
+                    show_item_13 = any(any(p.lower().endswith(ext) for ext in item_13_exts) for p in paths if not os.path.isdir(p))
+
+        if show_item_13:
+            if 'Add to Archive' not in menus:
+                group_item = Thunarx.MenuItem(name='PeaZipMenu::Add to Archive', label=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), tip=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), icon='archive-insert')
+                group_menu = Thunarx.Menu()
+                group_item.set_submenu(group_menu)
+                menus[''].append_item(group_item)
+                menus['Add to Archive'] = group_menu
+            if 'Add to Archive/Advanced & Security' not in menus:
+                group_item = Thunarx.MenuItem(name='PeaZipMenu::Add to Archive/Advanced & Security', label=_localize({'en': 'Advanced & Security', 'ar': 'حماية ومتقدم'}), tip=_localize({'en': 'Advanced & Security', 'ar': 'حماية ومتقدم'}), icon='preferences-system-security')
+                group_menu = Thunarx.Menu()
+                group_item.set_submenu(group_menu)
+                menus['Add to Archive'].append_item(group_item)
+                menus['Add to Archive/Advanced & Security'] = group_menu
+            item_13 = Thunarx.MenuItem(
+                name="PeaZipMenu::Action13",
+                label=_localize({'en': 'Create SFX Archive (7Z)', 'ar': 'أرشيف ذاتي الاستخراج (SFX)'}),
+                tip=_localize({'en': 'Create SFX Archive (7Z)', 'ar': 'أرشيف ذاتي الاستخراج (SFX)'}),
+                icon="application-x-executable",
+            )
+            item_13.connect("activate", _on_action_13, files)
+            menus['Add to Archive/Advanced & Security'].append_item(item_13)
+            items_added += 1
+        item_14_exts = ()
+        item_14_allow_all = True
+        show_item_14 = False
+
+        if 0 <= len(files) <= 1:
+            if has_dir and allow_dirs:
+                show_item_14 = True
+            elif has_file:
+                if item_14_allow_all:
+                    show_item_14 = True
+                else:
+                    show_item_14 = any(any(p.lower().endswith(ext) for ext in item_14_exts) for p in paths if not os.path.isdir(p))
+
+        if show_item_14:
+            if 'Add to Archive' not in menus:
+                group_item = Thunarx.MenuItem(name='PeaZipMenu::Add to Archive', label=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), tip=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), icon='archive-insert')
+                group_menu = Thunarx.Menu()
+                group_item.set_submenu(group_menu)
+                menus[''].append_item(group_item)
+                menus['Add to Archive'] = group_menu
+            if 'Add to Archive/Advanced & Security' not in menus:
+                group_item = Thunarx.MenuItem(name='PeaZipMenu::Add to Archive/Advanced & Security', label=_localize({'en': 'Advanced & Security', 'ar': 'حماية ومتقدم'}), tip=_localize({'en': 'Advanced & Security', 'ar': 'حماية ومتقدم'}), icon='preferences-system-security')
+                group_menu = Thunarx.Menu()
+                group_item.set_submenu(group_menu)
+                menus['Add to Archive'].append_item(group_item)
+                menus['Add to Archive/Advanced & Security'] = group_menu
+            item_14 = Thunarx.MenuItem(
+                name="PeaZipMenu::Action14",
                 label=_localize({'en': 'Split into Volumes', 'ar': 'تقسيم الملف إلى أجزاء'}),
                 tip=_localize({'en': 'Split into Volumes', 'ar': 'تقسيم الملف إلى أجزاء'}),
                 icon="view-split-left-right",
             )
-            item_10.connect("activate", _on_action_10, files)
-            menus['Add to Archive/Advanced & Security'].append_item(item_10)
+            item_14.connect("activate", _on_action_14, files)
+            menus['Add to Archive/Advanced & Security'].append_item(item_14)
             items_added += 1
         if items_added == 0:
             return []
