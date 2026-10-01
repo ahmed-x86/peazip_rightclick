@@ -9,7 +9,7 @@
 [Desktop Entry]
 Type=Service
 X-KDE-ServiceTypes=KonqPopupMenu/Plugin
-MimeType=application/octet-stream;application/vnd.rar;application/x-7z-compressed;application/x-tar;application/zip;application/zstd;inode/directory;
+MimeType=application/octet-stream;application/vnd.wolfram.mathematica.package;inode/directory;text/plain;text/vnd.a;
 X-KDE-Submenu=PeaZip
 X-KDE-Submenu[ar]=بيزيب
 Icon=peazip
@@ -18,12 +18,7 @@ Actions=Action0;Action1;
 [Desktop Action Action0]
 Name=Extract ▸ Extract Here
 Name[ar]=استخراج ▸ استخراج هنا
-Icon=archive-extract
 Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
-if ! command -v peazip >/dev/null 2>&1; then
-  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
-  exit 1
-fi
 for file in "$@"; do
   export file
   export dir="$(dirname "$file")"
@@ -48,10 +43,6 @@ Name=Extract ▸ Extract to New Folder
 Name[ar]=استخراج ▸ استخراج لمجلد جديد
 Icon=folder-new
 Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
-if ! command -v peazip >/dev/null 2>&1; then
-  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
-  exit 1
-fi
 for file in "$@"; do
   export file
   export dir="$(dirname "$file")"
