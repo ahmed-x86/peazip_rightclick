@@ -12,19 +12,15 @@ Name=PeaZip
 Name[ar]=بيزيب
 Icon=peazip
 Profiles=default;
-MimeTypes=application/octet-stream;application/vnd.rar;application/x-7z-compressed;application/x-tar;application/zip;application/zstd;inode/directory;
+MimeTypes=application/octet-stream;inode/directory;text/plain;text/vnd.a;
 TargetLocation=true
-Actions=Action0;Action1;Action2;
+Actions=Action0;
 
 [Desktop Action Action0]
 Name=Extract ▸ Extract... (Choose)
 Name[ar]=استخراج ▸ استخراج... (اختيار المكان)
 Icon=folder-remote
 Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
-if ! command -v peazip >/dev/null 2>&1; then
-  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
-  exit 1
-fi
 for file in "$@"; do
   export file
   export dir="$(dirname "$file")"
@@ -37,62 +33,6 @@ for file in "$@"; do
   _iter_script=$(mktemp)
   cat > "$_iter_script" << 'INNEREOF'
 peazip -ext2here "$file" -gui
-INNEREOF
-  bash "$_iter_script"
-  rm -f "$_iter_script"
-done
-EOF
-sh "$_cm" "$@"; rm -f "$_cm"' -- %F
-
-[Desktop Action Action1]
-Name=Extract ▸ Advanced Extract ▸ Extract Selected File (GUI)
-Name[ar]=استخراج ▸ استخراج متقدم ▸ استخراج ملف محدد (واجهة)
-Icon=document-open
-Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
-if ! command -v peazip >/dev/null 2>&1; then
-  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
-  exit 1
-fi
-for file in "$@"; do
-  export file
-  export dir="$(dirname "$file")"
-  export filename="$(basename "$file")"
-  ext="${filename##*.}"
-  [ "$ext" = "$filename" ] && ext=""
-  export ext
-  export basename="${filename%.*}"
-  export count=$#
-  _iter_script=$(mktemp)
-  cat > "$_iter_script" << 'INNEREOF'
-peazip "$file"
-INNEREOF
-  bash "$_iter_script"
-  rm -f "$_iter_script"
-done
-EOF
-sh "$_cm" "$@"; rm -f "$_cm"' -- %F
-
-[Desktop Action Action2]
-Name=Extract ▸ Advanced Extract ▸ Test Archive
-Name[ar]=استخراج ▸ استخراج متقدم ▸ فحص الأرشيف
-Icon=dialog-ok
-Exec=sh -c '_cm=$(mktemp); cat > "$_cm" << '"'"'EOF'"'"'
-if ! command -v peazip >/dev/null 2>&1; then
-  zenity --error --text="Required binary 'peazip' not found." 2>/dev/null || kdialog --error "Required binary 'peazip' not found." 2>/dev/null
-  exit 1
-fi
-for file in "$@"; do
-  export file
-  export dir="$(dirname "$file")"
-  export filename="$(basename "$file")"
-  ext="${filename##*.}"
-  [ "$ext" = "$filename" ] && ext=""
-  export ext
-  export basename="${filename%.*}"
-  export count=$#
-  _iter_script=$(mktemp)
-  cat > "$_iter_script" << 'INNEREOF'
-peazip -test "$file"
 INNEREOF
   bash "$_iter_script"
   rm -f "$_iter_script"
