@@ -93,9 +93,6 @@ def _execute_cmds(cmds: list, show_output: bool, notify: bool, name: str, shell:
 
 def _on_action_0(menu_item, files):
     """Callback: Open Archive (GUI)"""
-    if not shutil.which('peazip'):
-        _show_error(f"Required binary '{ 'peazip' }' not found.")
-        return
     cmds = []
     count = len(files)
     for file_item in files:
@@ -117,9 +114,6 @@ def _on_action_0(menu_item, files):
 
 def _on_action_1(menu_item, files):
     """Callback: Extract Here"""
-    if not shutil.which('peazip'):
-        _show_error(f"Required binary '{ 'peazip' }' not found.")
-        return
     cmds = []
     count = len(files)
     for file_item in files:
@@ -141,9 +135,6 @@ def _on_action_1(menu_item, files):
 
 def _on_action_2(menu_item, files):
     """Callback: Extract to New Folder"""
-    if not shutil.which('peazip'):
-        _show_error(f"Required binary '{ 'peazip' }' not found.")
-        return
     cmds = []
     count = len(files)
     for file_item in files:
@@ -165,9 +156,6 @@ def _on_action_2(menu_item, files):
 
 def _on_action_3(menu_item, files):
     """Callback: Extract... (Choose)"""
-    if not shutil.which('peazip'):
-        _show_error(f"Required binary '{ 'peazip' }' not found.")
-        return
     cmds = []
     count = len(files)
     for file_item in files:
@@ -188,58 +176,7 @@ def _on_action_3(menu_item, files):
 
 
 def _on_action_4(menu_item, files):
-    """Callback: Extract Selected File (GUI)"""
-    if not shutil.which('peazip'):
-        _show_error(f"Required binary '{ 'peazip' }' not found.")
-        return
-    cmds = []
-    count = len(files)
-    for file_item in files:
-        path = _path_from_item(file_item)
-        _dir = os.path.dirname(path)
-        _filename = os.path.basename(path)
-        _basename, _ext = os.path.splitext(_filename)
-        if _ext.startswith('.'): _ext = _ext[1:]
-        cmd = 'peazip %file'
-        cmd = cmd.replace('%count', str(count))
-        cmd = cmd.replace('%filename', shlex.quote(_filename))
-        cmd = cmd.replace('%basename', shlex.quote(_basename))
-        cmd = cmd.replace('%ext', shlex.quote(_ext))
-        cmd = cmd.replace('%dir', shlex.quote(_dir))
-        cmd = cmd.replace('%file', shlex.quote(path))
-        cmds.append(cmd)
-    _execute_cmds(cmds, show_output=False, notify=False, name='Extract Selected File (GUI)', shell=False)
-
-
-def _on_action_5(menu_item, files):
-    """Callback: Test Archive"""
-    if not shutil.which('peazip'):
-        _show_error(f"Required binary '{ 'peazip' }' not found.")
-        return
-    cmds = []
-    count = len(files)
-    for file_item in files:
-        path = _path_from_item(file_item)
-        _dir = os.path.dirname(path)
-        _filename = os.path.basename(path)
-        _basename, _ext = os.path.splitext(_filename)
-        if _ext.startswith('.'): _ext = _ext[1:]
-        cmd = 'peazip -test %file'
-        cmd = cmd.replace('%count', str(count))
-        cmd = cmd.replace('%filename', shlex.quote(_filename))
-        cmd = cmd.replace('%basename', shlex.quote(_basename))
-        cmd = cmd.replace('%ext', shlex.quote(_ext))
-        cmd = cmd.replace('%dir', shlex.quote(_dir))
-        cmd = cmd.replace('%file', shlex.quote(path))
-        cmds.append(cmd)
-    _execute_cmds(cmds, show_output=False, notify=False, name='Test Archive', shell=False)
-
-
-def _on_action_6(menu_item, files):
     """Callback: Add to ZIP"""
-    if not shutil.which('peazip'):
-        _show_error(f"Required binary '{ 'peazip' }' not found.")
-        return
     cmds = []
     count = len(files)
     for file_item in files:
@@ -259,11 +196,8 @@ def _on_action_6(menu_item, files):
     _execute_cmds(cmds, show_output=False, notify=False, name='Add to ZIP', shell=False)
 
 
-def _on_action_7(menu_item, files):
+def _on_action_5(menu_item, files):
     """Callback: Add to 7Z"""
-    if not shutil.which('peazip'):
-        _show_error(f"Required binary '{ 'peazip' }' not found.")
-        return
     cmds = []
     count = len(files)
     for file_item in files:
@@ -283,11 +217,8 @@ def _on_action_7(menu_item, files):
     _execute_cmds(cmds, show_output=False, notify=False, name='Add to 7Z', shell=False)
 
 
-def _on_action_8(menu_item, files):
-    """Callback: Add to TAR.GZ (Linux)"""
-    if not shutil.which('peazip'):
-        _show_error(f"Required binary '{ 'peazip' }' not found.")
-        return
+def _on_action_6(menu_item, files):
+    """Callback: Add to TAR.GZ"""
     cmds = []
     count = len(files)
     for file_item in files:
@@ -304,14 +235,11 @@ def _on_action_8(menu_item, files):
         cmd = cmd.replace('%dir', shlex.quote(_dir))
         cmd = cmd.replace('%file', shlex.quote(path))
         cmds.append(cmd)
-    _execute_cmds(cmds, show_output=False, notify=False, name='Add to TAR.GZ (Linux)', shell=False)
+    _execute_cmds(cmds, show_output=False, notify=False, name='Add to TAR.GZ', shell=False)
 
 
-def _on_action_9(menu_item, files):
-    """Callback: Add to ZST (Fast)"""
-    if not shutil.which('peazip'):
-        _show_error(f"Required binary '{ 'peazip' }' not found.")
-        return
+def _on_action_7(menu_item, files):
+    """Callback: Add to TAR.ZST"""
     cmds = []
     count = len(files)
     for file_item in files:
@@ -320,7 +248,7 @@ def _on_action_9(menu_item, files):
         _filename = os.path.basename(path)
         _basename, _ext = os.path.splitext(_filename)
         if _ext.startswith('.'): _ext = _ext[1:]
-        cmd = 'peazip -add2zst %file'
+        cmd = 'peazip -add2tzst %file'
         cmd = cmd.replace('%count', str(count))
         cmd = cmd.replace('%filename', shlex.quote(_filename))
         cmd = cmd.replace('%basename', shlex.quote(_basename))
@@ -328,7 +256,70 @@ def _on_action_9(menu_item, files):
         cmd = cmd.replace('%dir', shlex.quote(_dir))
         cmd = cmd.replace('%file', shlex.quote(path))
         cmds.append(cmd)
-    _execute_cmds(cmds, show_output=False, notify=False, name='Add to ZST (Fast)', shell=False)
+    _execute_cmds(cmds, show_output=False, notify=False, name='Add to TAR.ZST', shell=False)
+
+
+def _on_action_8(menu_item, files):
+    """Callback: Create Encrypted Archive"""
+    cmds = []
+    count = len(files)
+    for file_item in files:
+        path = _path_from_item(file_item)
+        _dir = os.path.dirname(path)
+        _filename = os.path.basename(path)
+        _basename, _ext = os.path.splitext(_filename)
+        if _ext.startswith('.'): _ext = _ext[1:]
+        cmd = 'peazip -add2crypt %file'
+        cmd = cmd.replace('%count', str(count))
+        cmd = cmd.replace('%filename', shlex.quote(_filename))
+        cmd = cmd.replace('%basename', shlex.quote(_basename))
+        cmd = cmd.replace('%ext', shlex.quote(_ext))
+        cmd = cmd.replace('%dir', shlex.quote(_dir))
+        cmd = cmd.replace('%file', shlex.quote(path))
+        cmds.append(cmd)
+    _execute_cmds(cmds, show_output=False, notify=False, name='Create Encrypted Archive', shell=False)
+
+
+def _on_action_9(menu_item, files):
+    """Callback: Create SFX Archive"""
+    cmds = []
+    count = len(files)
+    for file_item in files:
+        path = _path_from_item(file_item)
+        _dir = os.path.dirname(path)
+        _filename = os.path.basename(path)
+        _basename, _ext = os.path.splitext(_filename)
+        if _ext.startswith('.'): _ext = _ext[1:]
+        cmd = 'peazip -add2sfx %file'
+        cmd = cmd.replace('%count', str(count))
+        cmd = cmd.replace('%filename', shlex.quote(_filename))
+        cmd = cmd.replace('%basename', shlex.quote(_basename))
+        cmd = cmd.replace('%ext', shlex.quote(_ext))
+        cmd = cmd.replace('%dir', shlex.quote(_dir))
+        cmd = cmd.replace('%file', shlex.quote(path))
+        cmds.append(cmd)
+    _execute_cmds(cmds, show_output=False, notify=False, name='Create SFX Archive', shell=False)
+
+
+def _on_action_10(menu_item, files):
+    """Callback: Split into Volumes"""
+    cmds = []
+    count = len(files)
+    for file_item in files:
+        path = _path_from_item(file_item)
+        _dir = os.path.dirname(path)
+        _filename = os.path.basename(path)
+        _basename, _ext = os.path.splitext(_filename)
+        if _ext.startswith('.'): _ext = _ext[1:]
+        cmd = 'peazip -add2split %file'
+        cmd = cmd.replace('%count', str(count))
+        cmd = cmd.replace('%filename', shlex.quote(_filename))
+        cmd = cmd.replace('%basename', shlex.quote(_basename))
+        cmd = cmd.replace('%ext', shlex.quote(_ext))
+        cmd = cmd.replace('%dir', shlex.quote(_dir))
+        cmd = cmd.replace('%file', shlex.quote(path))
+        cmds.append(cmd)
+    _execute_cmds(cmds, show_output=False, notify=False, name='Split into Volumes', shell=False)
 
 
 # ---------------------------------------------------------------------------
@@ -364,7 +355,7 @@ class PeazipmenuExtension(GObject.GObject, Nemo.MenuProvider):
         items_added = 0
         # --- Menu Tree Setup ---
         menus = {'': submenu}
-        item_0_exts = ('.zip', '.7z', '.rar', '.tar', '.gz', '.bz2', '.xz', '.zst', '.tgz', '.tbz2', '.txz', '.tzst', '.001', '.iso', '.cab', '.arj')
+        item_0_exts = ('.@', '.a', '.l', '.l', '._', '.a', '.r', '.c', '.h', '.i', '.v', '.e', '.s')
         item_0_allow_all = False
         show_item_0 = False
 
@@ -387,7 +378,7 @@ class PeazipmenuExtension(GObject.GObject, Nemo.MenuProvider):
             item_0.connect("activate", _on_action_0, files)
             menus[''].append_item(item_0)
             items_added += 1
-        item_1_exts = ('.zip', '.7z', '.rar', '.tar', '.gz', '.bz2', '.xz', '.zst', '.tgz', '.tbz2', '.txz', '.tzst', '.001', '.iso')
+        item_1_exts = ('.@', '.c', '.o', '.m', '.m', '.o', '.n', '._', '.a', '.r', '.c', '.h', '.i', '.v', '.e', '.s')
         item_1_allow_all = False
         show_item_1 = False
 
@@ -411,12 +402,12 @@ class PeazipmenuExtension(GObject.GObject, Nemo.MenuProvider):
                 name="PeaZipMenu::Action1",
                 label=_localize({'en': 'Extract Here', 'ar': 'استخراج هنا'}),
                 tip=_localize({'en': 'Extract Here', 'ar': 'استخراج هنا'}),
-                icon="archive-extract",
+                icon="",
             )
             item_1.connect("activate", _on_action_1, files)
             menus['Extract'].append_item(item_1)
             items_added += 1
-        item_2_exts = ('.zip', '.7z', '.rar', '.tar', '.gz', '.bz2', '.xz', '.zst', '.tgz', '.tbz2', '.txz', '.tzst', '.001', '.iso')
+        item_2_exts = ('.@', '.c', '.o', '.m', '.m', '.o', '.n', '._', '.a', '.r', '.c', '.h', '.i', '.v', '.e', '.s')
         item_2_allow_all = False
         show_item_2 = False
 
@@ -445,7 +436,7 @@ class PeazipmenuExtension(GObject.GObject, Nemo.MenuProvider):
             item_2.connect("activate", _on_action_2, files)
             menus['Extract'].append_item(item_2)
             items_added += 1
-        item_3_exts = ('.zip', '.7z', '.rar', '.tar', '.gz', '.bz2', '.xz', '.zst')
+        item_3_exts = ('.@', '.b', '.a', '.s', '.i', '.c', '._', '.a', '.r', '.c', '.h', '.i', '.v', '.e', '.s')
         item_3_allow_all = False
         show_item_3 = False
 
@@ -474,11 +465,11 @@ class PeazipmenuExtension(GObject.GObject, Nemo.MenuProvider):
             item_3.connect("activate", _on_action_3, files)
             menus['Extract'].append_item(item_3)
             items_added += 1
-        item_4_exts = ('.zip', '.7z', '.rar', '.tar', '.gz', '.bz2', '.xz', '.zst')
-        item_4_allow_all = False
+        item_4_exts = ()
+        item_4_allow_all = True
         show_item_4 = False
 
-        if 0 <= len(files) <= 1:
+        if 0 <= len(files) <= 999999:
             if has_dir and allow_dirs:
                 show_item_4 = True
             elif has_file:
@@ -488,32 +479,26 @@ class PeazipmenuExtension(GObject.GObject, Nemo.MenuProvider):
                     show_item_4 = any(any(p.lower().endswith(ext) for ext in item_4_exts) for p in paths if not os.path.isdir(p))
 
         if show_item_4:
-            if 'Extract' not in menus:
-                group_item = Nemo.MenuItem(name='PeaZipMenu::Extract', label=_localize({'en': 'Extract', 'ar': 'استخراج'}), tip=_localize({'en': 'Extract', 'ar': 'استخراج'}), icon='archive-extract')
+            if 'Add to Archive' not in menus:
+                group_item = Nemo.MenuItem(name='PeaZipMenu::Add to Archive', label=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), tip=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), icon='archive-insert')
                 group_menu = Nemo.Menu()
                 group_item.set_submenu(group_menu)
                 menus[''].append_item(group_item)
-                menus['Extract'] = group_menu
-            if 'Extract/Advanced Extract' not in menus:
-                group_item = Nemo.MenuItem(name='PeaZipMenu::Extract/Advanced Extract', label=_localize({'en': 'Advanced Extract', 'ar': 'استخراج متقدم'}), tip=_localize({'en': 'Advanced Extract', 'ar': 'استخراج متقدم'}), icon='applications-system')
-                group_menu = Nemo.Menu()
-                group_item.set_submenu(group_menu)
-                menus['Extract'].append_item(group_item)
-                menus['Extract/Advanced Extract'] = group_menu
+                menus['Add to Archive'] = group_menu
             item_4 = Nemo.MenuItem(
                 name="PeaZipMenu::Action4",
-                label=_localize({'en': 'Extract Selected File (GUI)', 'ar': 'استخراج ملف محدد (واجهة)'}),
-                tip=_localize({'en': 'Extract Selected File (GUI)', 'ar': 'استخراج ملف محدد (واجهة)'}),
-                icon="document-open",
+                label=_localize({'en': 'Add to ZIP', 'ar': 'إضافة إلى ZIP'}),
+                tip=_localize({'en': 'Add to ZIP', 'ar': 'إضافة إلى ZIP'}),
+                icon="",
             )
             item_4.connect("activate", _on_action_4, files)
-            menus['Extract/Advanced Extract'].append_item(item_4)
+            menus['Add to Archive'].append_item(item_4)
             items_added += 1
-        item_5_exts = ('.zip', '.7z', '.rar', '.tar', '.gz', '.bz2', '.xz', '.zst')
-        item_5_allow_all = False
+        item_5_exts = ()
+        item_5_allow_all = True
         show_item_5 = False
 
-        if 0 <= len(files) <= 10:
+        if 0 <= len(files) <= 999999:
             if has_dir and allow_dirs:
                 show_item_5 = True
             elif has_file:
@@ -523,32 +508,26 @@ class PeazipmenuExtension(GObject.GObject, Nemo.MenuProvider):
                     show_item_5 = any(any(p.lower().endswith(ext) for ext in item_5_exts) for p in paths if not os.path.isdir(p))
 
         if show_item_5:
-            if 'Extract' not in menus:
-                group_item = Nemo.MenuItem(name='PeaZipMenu::Extract', label=_localize({'en': 'Extract', 'ar': 'استخراج'}), tip=_localize({'en': 'Extract', 'ar': 'استخراج'}), icon='archive-extract')
+            if 'Add to Archive' not in menus:
+                group_item = Nemo.MenuItem(name='PeaZipMenu::Add to Archive', label=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), tip=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), icon='archive-insert')
                 group_menu = Nemo.Menu()
                 group_item.set_submenu(group_menu)
                 menus[''].append_item(group_item)
-                menus['Extract'] = group_menu
-            if 'Extract/Advanced Extract' not in menus:
-                group_item = Nemo.MenuItem(name='PeaZipMenu::Extract/Advanced Extract', label=_localize({'en': 'Advanced Extract', 'ar': 'استخراج متقدم'}), tip=_localize({'en': 'Advanced Extract', 'ar': 'استخراج متقدم'}), icon='applications-system')
-                group_menu = Nemo.Menu()
-                group_item.set_submenu(group_menu)
-                menus['Extract'].append_item(group_item)
-                menus['Extract/Advanced Extract'] = group_menu
+                menus['Add to Archive'] = group_menu
             item_5 = Nemo.MenuItem(
                 name="PeaZipMenu::Action5",
-                label=_localize({'en': 'Test Archive', 'ar': 'فحص الأرشيف'}),
-                tip=_localize({'en': 'Test Archive', 'ar': 'فحص الأرشيف'}),
-                icon="dialog-ok",
+                label=_localize({'en': 'Add to 7Z', 'ar': 'إضافة إلى 7Z'}),
+                tip=_localize({'en': 'Add to 7Z', 'ar': 'إضافة إلى 7Z'}),
+                icon="",
             )
             item_5.connect("activate", _on_action_5, files)
-            menus['Extract/Advanced Extract'].append_item(item_5)
+            menus['Add to Archive'].append_item(item_5)
             items_added += 1
-        item_6_exts = ('.txt', '.pdf', '.mp4', '.mkv', '.mp3', '.jpg', '.png', '.doc', '.docx', '.zip', '.7z')
-        item_6_allow_all = False
+        item_6_exts = ()
+        item_6_allow_all = True
         show_item_6 = False
 
-        if 0 <= len(files) <= 100:
+        if 0 <= len(files) <= 999999:
             if has_dir and allow_dirs:
                 show_item_6 = True
             elif has_file:
@@ -564,20 +543,26 @@ class PeazipmenuExtension(GObject.GObject, Nemo.MenuProvider):
                 group_item.set_submenu(group_menu)
                 menus[''].append_item(group_item)
                 menus['Add to Archive'] = group_menu
+            if 'Add to Archive/Linux & Pro' not in menus:
+                group_item = Nemo.MenuItem(name='PeaZipMenu::Add to Archive/Linux & Pro', label=_localize({'en': 'Linux & Pro', 'ar': 'لينكس واحترافي'}), tip=_localize({'en': 'Linux & Pro', 'ar': 'لينكس واحترافي'}))
+                group_menu = Nemo.Menu()
+                group_item.set_submenu(group_menu)
+                menus['Add to Archive'].append_item(group_item)
+                menus['Add to Archive/Linux & Pro'] = group_menu
             item_6 = Nemo.MenuItem(
                 name="PeaZipMenu::Action6",
-                label=_localize({'en': 'Add to ZIP', 'ar': 'إضافة إلى ZIP'}),
-                tip=_localize({'en': 'Add to ZIP', 'ar': 'إضافة إلى ZIP'}),
-                icon="package-x-generic",
+                label=_localize({'en': 'Add to TAR.GZ', 'ar': 'إضافة إلى TAR.GZ'}),
+                tip=_localize({'en': 'Add to TAR.GZ', 'ar': 'إضافة إلى TAR.GZ'}),
+                icon="",
             )
             item_6.connect("activate", _on_action_6, files)
-            menus['Add to Archive'].append_item(item_6)
+            menus['Add to Archive/Linux & Pro'].append_item(item_6)
             items_added += 1
-        item_7_exts = ('.txt', '.pdf', '.mp4', '.mkv', '.mp3', '.jpg', '.png', '.doc', '.docx', '.zip', '.7z')
-        item_7_allow_all = False
+        item_7_exts = ()
+        item_7_allow_all = True
         show_item_7 = False
 
-        if 0 <= len(files) <= 100:
+        if 0 <= len(files) <= 999999:
             if has_dir and allow_dirs:
                 show_item_7 = True
             elif has_file:
@@ -593,20 +578,26 @@ class PeazipmenuExtension(GObject.GObject, Nemo.MenuProvider):
                 group_item.set_submenu(group_menu)
                 menus[''].append_item(group_item)
                 menus['Add to Archive'] = group_menu
+            if 'Add to Archive/Linux & Pro' not in menus:
+                group_item = Nemo.MenuItem(name='PeaZipMenu::Add to Archive/Linux & Pro', label=_localize({'en': 'Linux & Pro', 'ar': 'لينكس واحترافي'}), tip=_localize({'en': 'Linux & Pro', 'ar': 'لينكس واحترافي'}))
+                group_menu = Nemo.Menu()
+                group_item.set_submenu(group_menu)
+                menus['Add to Archive'].append_item(group_item)
+                menus['Add to Archive/Linux & Pro'] = group_menu
             item_7 = Nemo.MenuItem(
                 name="PeaZipMenu::Action7",
-                label=_localize({'en': 'Add to 7Z', 'ar': 'إضافة إلى 7Z'}),
-                tip=_localize({'en': 'Add to 7Z', 'ar': 'إضافة إلى 7Z'}),
-                icon="package-x-generic",
+                label=_localize({'en': 'Add to TAR.ZST', 'ar': 'إضافة إلى TAR.ZST'}),
+                tip=_localize({'en': 'Add to TAR.ZST', 'ar': 'إضافة إلى TAR.ZST'}),
+                icon="",
             )
             item_7.connect("activate", _on_action_7, files)
-            menus['Add to Archive'].append_item(item_7)
+            menus['Add to Archive/Linux & Pro'].append_item(item_7)
             items_added += 1
-        item_8_exts = ('.txt', '.pdf', '.mp4', '.mkv', '.mp3', '.jpg', '.png')
-        item_8_allow_all = False
+        item_8_exts = ()
+        item_8_allow_all = True
         show_item_8 = False
 
-        if 0 <= len(files) <= 100:
+        if 0 <= len(files) <= 999999:
             if has_dir and allow_dirs:
                 show_item_8 = True
             elif has_file:
@@ -622,26 +613,26 @@ class PeazipmenuExtension(GObject.GObject, Nemo.MenuProvider):
                 group_item.set_submenu(group_menu)
                 menus[''].append_item(group_item)
                 menus['Add to Archive'] = group_menu
-            if 'Add to Archive/Professional' not in menus:
-                group_item = Nemo.MenuItem(name='PeaZipMenu::Add to Archive/Professional', label=_localize({'en': 'Professional', 'ar': 'احترافي'}), tip=_localize({'en': 'Professional', 'ar': 'احترافي'}), icon='package-x-generic')
+            if 'Add to Archive/Advanced & Security' not in menus:
+                group_item = Nemo.MenuItem(name='PeaZipMenu::Add to Archive/Advanced & Security', label=_localize({'en': 'Advanced & Security', 'ar': 'حماية ومتقدم'}), tip=_localize({'en': 'Advanced & Security', 'ar': 'حماية ومتقدم'}), icon='preferences-system-security')
                 group_menu = Nemo.Menu()
                 group_item.set_submenu(group_menu)
                 menus['Add to Archive'].append_item(group_item)
-                menus['Add to Archive/Professional'] = group_menu
+                menus['Add to Archive/Advanced & Security'] = group_menu
             item_8 = Nemo.MenuItem(
                 name="PeaZipMenu::Action8",
-                label=_localize({'en': 'Add to TAR.GZ (Linux)', 'ar': 'إضافة إلى TAR.GZ'}),
-                tip=_localize({'en': 'Add to TAR.GZ (Linux)', 'ar': 'إضافة إلى TAR.GZ'}),
-                icon="package-x-generic",
+                label=_localize({'en': 'Create Encrypted Archive', 'ar': 'إنشاء أرشيف مشفر'}),
+                tip=_localize({'en': 'Create Encrypted Archive', 'ar': 'إنشاء أرشيف مشفر'}),
+                icon="dialog-password",
             )
             item_8.connect("activate", _on_action_8, files)
-            menus['Add to Archive/Professional'].append_item(item_8)
+            menus['Add to Archive/Advanced & Security'].append_item(item_8)
             items_added += 1
-        item_9_exts = ('.txt', '.pdf', '.mp4', '.mkv', '.mp3', '.jpg', '.png')
-        item_9_allow_all = False
+        item_9_exts = ()
+        item_9_allow_all = True
         show_item_9 = False
 
-        if 0 <= len(files) <= 100:
+        if 0 <= len(files) <= 1:
             if has_dir and allow_dirs:
                 show_item_9 = True
             elif has_file:
@@ -657,20 +648,55 @@ class PeazipmenuExtension(GObject.GObject, Nemo.MenuProvider):
                 group_item.set_submenu(group_menu)
                 menus[''].append_item(group_item)
                 menus['Add to Archive'] = group_menu
-            if 'Add to Archive/Professional' not in menus:
-                group_item = Nemo.MenuItem(name='PeaZipMenu::Add to Archive/Professional', label=_localize({'en': 'Professional', 'ar': 'احترافي'}), tip=_localize({'en': 'Professional', 'ar': 'احترافي'}), icon='package-x-generic')
+            if 'Add to Archive/Advanced & Security' not in menus:
+                group_item = Nemo.MenuItem(name='PeaZipMenu::Add to Archive/Advanced & Security', label=_localize({'en': 'Advanced & Security', 'ar': 'حماية ومتقدم'}), tip=_localize({'en': 'Advanced & Security', 'ar': 'حماية ومتقدم'}), icon='preferences-system-security')
                 group_menu = Nemo.Menu()
                 group_item.set_submenu(group_menu)
                 menus['Add to Archive'].append_item(group_item)
-                menus['Add to Archive/Professional'] = group_menu
+                menus['Add to Archive/Advanced & Security'] = group_menu
             item_9 = Nemo.MenuItem(
                 name="PeaZipMenu::Action9",
-                label=_localize({'en': 'Add to ZST (Fast)', 'ar': 'إضافة إلى ZST (سريع)'}),
-                tip=_localize({'en': 'Add to ZST (Fast)', 'ar': 'إضافة إلى ZST (سريع)'}),
-                icon="package-x-generic",
+                label=_localize({'en': 'Create SFX Archive', 'ar': 'أرشيف ذاتي الاستخراج (SFX)'}),
+                tip=_localize({'en': 'Create SFX Archive', 'ar': 'أرشيف ذاتي الاستخراج (SFX)'}),
+                icon="application-x-executable",
             )
             item_9.connect("activate", _on_action_9, files)
-            menus['Add to Archive/Professional'].append_item(item_9)
+            menus['Add to Archive/Advanced & Security'].append_item(item_9)
+            items_added += 1
+        item_10_exts = ()
+        item_10_allow_all = True
+        show_item_10 = False
+
+        if 0 <= len(files) <= 1:
+            if has_dir and allow_dirs:
+                show_item_10 = True
+            elif has_file:
+                if item_10_allow_all:
+                    show_item_10 = True
+                else:
+                    show_item_10 = any(any(p.lower().endswith(ext) for ext in item_10_exts) for p in paths if not os.path.isdir(p))
+
+        if show_item_10:
+            if 'Add to Archive' not in menus:
+                group_item = Nemo.MenuItem(name='PeaZipMenu::Add to Archive', label=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), tip=_localize({'en': 'Add to Archive', 'ar': 'إضافة لأرشيف'}), icon='archive-insert')
+                group_menu = Nemo.Menu()
+                group_item.set_submenu(group_menu)
+                menus[''].append_item(group_item)
+                menus['Add to Archive'] = group_menu
+            if 'Add to Archive/Advanced & Security' not in menus:
+                group_item = Nemo.MenuItem(name='PeaZipMenu::Add to Archive/Advanced & Security', label=_localize({'en': 'Advanced & Security', 'ar': 'حماية ومتقدم'}), tip=_localize({'en': 'Advanced & Security', 'ar': 'حماية ومتقدم'}), icon='preferences-system-security')
+                group_menu = Nemo.Menu()
+                group_item.set_submenu(group_menu)
+                menus['Add to Archive'].append_item(group_item)
+                menus['Add to Archive/Advanced & Security'] = group_menu
+            item_10 = Nemo.MenuItem(
+                name="PeaZipMenu::Action10",
+                label=_localize({'en': 'Split into Volumes', 'ar': 'تقسيم الملف إلى أجزاء'}),
+                tip=_localize({'en': 'Split into Volumes', 'ar': 'تقسيم الملف إلى أجزاء'}),
+                icon="view-split-left-right",
+            )
+            item_10.connect("activate", _on_action_10, files)
+            menus['Add to Archive/Advanced & Security'].append_item(item_10)
             items_added += 1
         if items_added == 0:
             return []
