@@ -176,7 +176,7 @@ def _on_action_3(menu_item, files):
         _filename = os.path.basename(path)
         _basename, _ext = os.path.splitext(_filename)
         if _ext.startswith('.'): _ext = _ext[1:]
-        cmd = 'fm=$(xdg-mime query default inode/directory 2>/dev/null); case "$fm" in *dolphin*|*kde*|*qt*|*konqueror*) pick=kdialog;; *) pick=zenity;; esac; command -v "$pick" >/dev/null 2>&1 || { pick=zenity; command -v zenity >/dev/null 2>&1 || pick=kdialog; }; if [ "$pick" = kdialog ]; then out=$(kdialog --getexistingdirectory %dir/); else out=$(zenity --file-selection --directory --title="PeaZip" --filename=%dir/); fi; [ -n "$out" ] && peazip -ext2here -o "$out" %file'
+        cmd = 'peazip -ext2to %file'
         cmd = cmd.replace('%count', str(count))
         cmd = cmd.replace('%filename', shlex.quote(_filename))
         cmd = cmd.replace('%basename', shlex.quote(_basename))
@@ -184,7 +184,7 @@ def _on_action_3(menu_item, files):
         cmd = cmd.replace('%dir', shlex.quote(_dir))
         cmd = cmd.replace('%file', shlex.quote(path))
         cmds.append(cmd)
-    _execute_cmds(cmds, show_output=False, notify=False, name='Extract to... (Choose Folder)', shell=True)
+    _execute_cmds(cmds, show_output=False, notify=False, name='Extract to... (Choose Folder)', shell=False)
 
 
 def _on_action_4(menu_item, files):
