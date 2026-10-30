@@ -25,22 +25,8 @@
         "requires_binary": "peazip",
         "icon": "peazip",
         "supported_extensions": [
-          ".zip",
-          ".7z",
-          ".rar",
-          ".tar",
-          ".gz",
-          ".bz2",
-          ".xz",
-          ".zst",
-          ".tgz",
-          ".tbz2",
-          ".txz",
-          ".tzst",
-          ".001",
-          ".iso",
-          ".cab",
-          ".arj"
+          ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst",
+          ".tgz", ".tbz2", ".txz", ".tzst", ".001", ".iso", ".cab", ".arj"
         ],
         "max_files": 1
       },
@@ -60,22 +46,8 @@
             "requires_binary": "peazip",
             "icon": "archive-extract",
             "supported_extensions": [
-              ".zip",
-              ".7z",
-              ".rar",
-              ".tar",
-              ".gz",
-              ".bz2",
-              ".xz",
-              ".zst",
-              ".tgz",
-              ".tbz2",
-              ".txz",
-              ".tzst",
-              ".001",
-              ".iso",
-              ".cab",
-              ".arj"
+              ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst",
+              ".tgz", ".tbz2", ".txz", ".tzst", ".001", ".iso", ".cab", ".arj"
             ],
             "max_files": 20
           },
@@ -88,22 +60,8 @@
             "requires_binary": "peazip",
             "icon": "folder-new",
             "supported_extensions": [
-              ".zip",
-              ".7z",
-              ".rar",
-              ".tar",
-              ".gz",
-              ".bz2",
-              ".xz",
-              ".zst",
-              ".tgz",
-              ".tbz2",
-              ".txz",
-              ".tzst",
-              ".001",
-              ".iso",
-              ".cab",
-              ".arj"
+              ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst",
+              ".tgz", ".tbz2", ".txz", ".tzst", ".001", ".iso", ".cab", ".arj"
             ],
             "max_files": 20
           },
@@ -112,29 +70,14 @@
               "en": "Extract to... (Choose Folder)",
               "ar": "استخراج إلى... (اختيار المجلد)"
             },
-            "command": "fm=$(xdg-mime query default inode/directory 2>/dev/null); case \"$fm\" in *dolphin*|*kde*|*qt*|*konqueror*) pick=kdialog;; *) pick=zenity;; esac; command -v \"$pick\" >/dev/null 2>&1 || { pick=zenity; command -v zenity >/dev/null 2>&1 || pick=kdialog; }; if [ \"$pick\" = kdialog ]; then out=$(kdialog --getexistingdirectory %dir/); else out=$(zenity --file-selection --directory --title=\"PeaZip\" --filename=%dir/); fi; [ -n \"$out\" ] && peazip -ext2here -o \"$out\" %file",
+            "command": "peazip -ext2to %file",
             "requires_binary": "peazip",
             "icon": "folder-open",
             "supported_extensions": [
-              ".zip",
-              ".7z",
-              ".rar",
-              ".tar",
-              ".gz",
-              ".bz2",
-              ".xz",
-              ".zst",
-              ".tgz",
-              ".tbz2",
-              ".txz",
-              ".tzst",
-              ".001",
-              ".iso",
-              ".cab",
-              ".arj"
+              ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst",
+              ".tgz", ".tbz2", ".txz", ".tzst", ".001", ".iso", ".cab", ".arj"
             ],
-            "max_files": 1,
-            "shell": true
+            "max_files": 1
           },
           {
             "name": {
@@ -145,22 +88,8 @@
             "requires_binary": "peazip",
             "icon": "preferences-system",
             "supported_extensions": [
-              ".zip",
-              ".7z",
-              ".rar",
-              ".tar",
-              ".gz",
-              ".bz2",
-              ".xz",
-              ".zst",
-              ".tgz",
-              ".tbz2",
-              ".txz",
-              ".tzst",
-              ".001",
-              ".iso",
-              ".cab",
-              ".arj"
+              ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst",
+              ".tgz", ".tbz2", ".txz", ".tzst", ".001", ".iso", ".cab", ".arj"
             ],
             "max_files": 20
           },
@@ -173,22 +102,8 @@
             "requires_binary": "peazip",
             "icon": "emblem-ok-symbolic",
             "supported_extensions": [
-              ".zip",
-              ".7z",
-              ".rar",
-              ".tar",
-              ".gz",
-              ".bz2",
-              ".xz",
-              ".zst",
-              ".tgz",
-              ".tbz2",
-              ".txz",
-              ".tzst",
-              ".001",
-              ".iso",
-              ".cab",
-              ".arj"
+              ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz", ".zst",
+              ".tgz", ".tbz2", ".txz", ".tzst", ".001", ".iso", ".cab", ".arj"
             ],
             "max_files": 20
           }
